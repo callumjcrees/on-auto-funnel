@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free AI Automation Audit — On Auto</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #222222;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --accent-light: rgba(99, 102, 241, 0.12);
+      --text: #f5f5f5;
+      --text-muted: #888888;
+      --text-dim: #555555;
+      --success: #22c55e;
+      --radius: 10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border);
+      z-index: 100;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.4s ease;
+    }
+
+    /* Logo bar */
+    .logo-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      z-index: 99;
+    }
+
+    .logo {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      opacity: 0.85;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    /* Main layout */
+    .form-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 24px 40px;
+      min-height: 100vh;
+    }
+
+    .form-inner {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* Pages */
+    .page {
+      display: none;
+      animation: fadeUp 0.35s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cover page */
+    .cover-tag {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .cover-headline {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+
+    .cover-headline em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .cover-sub {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 520px;
+    }
+
+    .cover-bullets {
+      list-style: none;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cover-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .bullet-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .bullet-icon svg {
+      width: 11px;
+      height: 11px;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+    }
+
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .testimonial {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+    }
+
+    .testimonial-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .author-avatar {
+      width: 30px;
+      height: 30px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .author-info {
+      font-size: 13px;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .author-role {
+      color: var(--text-dim);
+    }
+
+    /* Question pages */
+    .question-label {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .question-title {
+      font-size: clamp(20px, 4vw, 26px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+
+    .question-hint {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 32px;
+    }
+
+    /* Inputs */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--accent);
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 110px;
+      line-height: 1.55;
+    }
+
+    .field select option {
+      background: #1a1a1a;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-dim);
+    }
+
+    /* Choice grid */
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .choice-grid.single-col {
+      grid-template-columns: 1fr;
+    }
+
+    .choice-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      user-select: none;
+    }
+
+    .choice-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .choice-item.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--text);
+    }
+
+    .choice-check {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .choice-item.selected .choice-check {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .choice-check svg {
+      width: 10px;
+      height: 10px;
+      stroke: white;
+      stroke-width: 2.5;
+      opacity: 0;
+    }
+
+    .choice-item.selected .choice-check svg {
+      opacity: 1;
+    }
+
+    /* Radio style for single select */
+    .radio-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      user-select: none;
+      margin-bottom: 10px;
+    }
+
+    .radio-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-item.selected {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .radio-dot {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .radio-item.selected .radio-dot {
+      border-color: var(--accent);
+    }
+
+    .radio-dot-inner {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .radio-item.selected .radio-dot-inner {
+      opacity: 1;
+    }
+
+    /* Range slider */
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 8px;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      margin: 16px 0 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .range-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius);
+      padding: 15px 28px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary svg {
+      width: 16px;
+      height: 16px;
+      stroke: white;
+      stroke-width: 2.5;
+    }
+
+    .nav-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-back {
+      background: transparent;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    /* Thank you page */
+    .ty-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+
+    .ty-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--accent);
+      stroke-width: 2;
+    }
+
+    .ty-headline {
+      font-size: clamp(22px, 4vw, 30px);
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      margin-bottom: 14px;
+    }
+
+    .ty-sub {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+
+    .ty-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .ty-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .step-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .ty-ps {
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .ty-ps a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Error state */
+    .error-msg {
+      font-size: 13px;
+      color: #f87171;
+      margin-top: 8px;
+      display: none;
+    }
+
+    .error-msg.visible {
+      display: block;
+    }
+
+    /* Mobile */
+    @media (max-width: 520px) {
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+  </div>
+
+  <!-- Logo -->
+  <div class="logo-bar">
+    <div class="logo">On<span>Auto</span></div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-wrapper">
+    <div class="form-inner">
+
+      <!-- Page 1: Cover -->
+      <div class="page active" id="page-1">
+        <div class="cover-tag">Free — No obligation</div>
+        <h1 class="cover-headline">Get your free <em>AI Automation Audit</em> — delivered in 48 hours</h1>
+        <p class="cover-sub">We'll map your business processes, identify where AI can replace manual work, and show you exactly how to recover 10+ hours per week — for free.</p>
+
+        <ul class="cover-bullets">
+          <li>
+            <span class="bullet-icon">
+              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
+            </span>
+            Custom audit built around your actual workflow — not a generic checklist
+          </li>
+          <li>
+            <span class="bullet-icon">
+              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
+            </span>
+            Identify the 3 highest-ROI automation opportunities in your business right now
+          </li>
+          <li>
+            <span class="bullet-icon">
+              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
+            </span>
+            Done by the On Auto team — real analysis, not a PDF template
+          </li>
+        </ul>
+
+        <div class="testimonials">
+          <div class="testimonial">
+            <p class="testimonial-text">"Within a week of working with On Auto, we'd automated our lead follow-up completely. What used to take me 2 hours a day now runs itself."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">JM</div>
+              <div class="author-info">
+                <div class="author-name">James M.</div>
+                <div class="author-role">Founder, B2B SaaS</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial">
+            <p class="testimonial-text">"The audit showed us we were leaving £12k/month on the table in uncontacted inbound leads. Fixed in 3 days with a voice agent."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar">SR</div>
+              <div class="author-info">
+                <div class="author-name">Sarah R.</div>
+                <div class="author-role">Head of Ops, Agency</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" onclick="goTo(2)">
+          Get my free audit
+          <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+        </button>
+      </div>
+
+      <!-- Page 2: Contact -->
+      <div class="page" id="page-2">
+        <div class="question-label">Step 1 of 5</div>
+        <h2 class="question-title">First, let's get your details</h2>
+        <p class="question-hint">We'll use these to personalise your audit and send it over when it's ready.</p>
+
+        <div class="field-group">
+          <div class="field">
+            <label>Your first name</label>
+            <input type="text" id="firstName" placeholder="e.g. James" autocomplete="given-name" />
+          </div>
+          <div class="field">
+            <label>Company name</label>
+            <input type="text" id="companyName" placeholder="e.g. Apex Media" autocomplete="organization" />
+          </div>
+          <div class="field">
+            <label>LinkedIn URL <span style="color: var(--text-dim); font-weight: 400;">(so we can review your business before the audit)</span></label>
+            <input type="url" id="linkedinUrl" placeholder="linkedin.com/in/yourname" />
+          </div>
+        </div>
+
+        <p class="error-msg" id="err-2">Please fill in all fields above to continue.</p>
+
+        <div class="nav-row">
+          <button class="btn-back" onclick="goTo(1)">Back</button>
+          <button class="btn-primary" onclick="validateAndGo(2, 3)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page 3: Business context -->
+      <div class="page" id="page-3">
+        <div class="question-label">Step 2 of 5</div>
+        <h2 class="question-title" id="q3-title">What does your business do, <span class="name-insert"></span>?</h2>
+        <p class="question-hint">Give us a quick picture — the more specific, the more useful your audit will be.</p>
+
+        <div class="field-group">
+          <div class="field">
+            <label>Industry / type of business</label>
+            <select id="industry">
+              <option value="" disabled selected>Select your industry</option>
+              <option>Agency (marketing, creative, web)</option>
+              <option>Coaching / consulting</option>
+              <option>Real estate</option>
+              <option>SaaS / tech</option>
+              <option>E-commerce / retail</option>
+              <option>Financial services</option>
+              <option>Healthcare / wellness</option>
+              <option>Recruitment / staffing</option>
+              <option>Trades / home services</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Team size</label>
+            <select id="teamSize">
+              <option value="" disabled selected>Select team size</option>
+              <option>Just me</option>
+              <option>2–5 people</option>
+              <option>6–15 people</option>
+              <option>16–50 people</option>
+              <option>50+ people</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Brief description of what you do</label>
+            <textarea id="bizDescription" placeholder="e.g. We run paid ads for e-commerce brands and manage about 30 clients. Most of our time goes on reporting, client comms, and campaign management."></textarea>
+          </div>
+        </div>
+
+        <p class="error-msg" id="err-3">Please fill in all fields above.</p>
+
+        <div class="nav-row">
+          <button class="btn-back" onclick="goTo(2)">Back</button>
+          <button class="btn-primary" onclick="validateAndGo(3, 4)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page 4: Pain points -->
+      <div class="page" id="page-4">
+        <div class="question-label">Step 3 of 5</div>
+        <h2 class="question-title">Where's the biggest drag on your time right now?</h2>
+        <p class="question-hint">Select all that apply — this shapes which automations we look at first in your audit.</p>
+
+        <div class="choice-grid" id="pain-grid">
+          <div class="choice-item" data-value="lead-followup" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Lead follow-up & nurture</span>
+          </div>
+          <div class="choice-item" data-value="speed-to-lead" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Slow response to inbound leads</span>
+          </div>
+          <div class="choice-item" data-value="admin" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Admin & data entry</span>
+          </div>
+          <div class="choice-item" data-value="reporting" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Reporting & analytics</span>
+          </div>
+          <div class="choice-item" data-value="client-comms" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Client communication & updates</span>
+          </div>
+          <div class="choice-item" data-value="onboarding" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Client / customer onboarding</span>
+          </div>
+          <div class="choice-item" data-value="booking" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Appointment booking & reminders</span>
+          </div>
+          <div class="choice-item" data-value="reactivation" onclick="toggleChoice(this)">
+            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
+            <span>Reactivating old leads / customers</span>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom: 32px;">
+          <label>Anything else? <span style="color: var(--text-dim); font-weight: 400;">(optional)</span></label>
+          <textarea id="painOther" placeholder="Describe any specific bottlenecks, frustrations, or tasks that eat your time..." style="min-height: 80px;"></textarea>
+        </div>
+
+        <p class="error-msg" id="err-4">Please select at least one area above.</p>
+
+        <div class="nav-row">
+          <button class="btn-back" onclick="goTo(3)">Back</button>
+          <button class="btn-primary" onclick="validateAndGo(4, 5)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page 5: Tools + value -->
+      <div class="page" id="page-5">
+        <div class="question-label">Step 4 of 5</div>
+        <h2 class="question-title">What tools does your business currently run on?</h2>
+        <p class="question-hint">CRM, communication tools, anything relevant. We'll build your audit around your existing stack — no ripping and replacing.</p>
+
+        <div class="field-group" style="margin-bottom: 24px;">
+          <div class="field">
+            <label>Current tools / tech stack</label>
+            <textarea id="techStack" placeholder="e.g. HubSpot CRM, Slack, Google Sheets, Calendly, Xero. No dedicated follow-up automation yet."></textarea>
+          </div>
+        </div>
+
+        <h2 class="question-title" style="margin-bottom: 10px;">If the problems above were automated away, what's that worth?</h2>
+        <p class="question-hint">Rough estimate is fine. Helps us focus the audit on highest-ROI opportunities.</p>
+
+        <div class="field" style="margin-bottom: 32px;">
+          <div class="range-value" id="roiDisplay">~£5,000/month</div>
+          <input type="range" id="roiSlider" min="0" max="8" step="1" value="2" oninput="updateROI(this.value)" />
+          <div class="range-labels">
+            <span>Not sure</span>
+            <span>£50k+/month</span>
+          </div>
+        </div>
+
+        <p class="error-msg" id="err-5">Please fill in your tech stack above.</p>
+
+        <div class="nav-row">
+          <button class="btn-back" onclick="goTo(4)">Back</button>
+          <button class="btn-primary" onclick="validateAndGo(5, 6)">
+            Continue
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page 6: Email -->
+      <div class="page" id="page-6">
+        <div class="question-label">Step 5 of 5 — Last one</div>
+        <h2 class="question-title">Where should we send your audit, <span class="name-insert"></span>?</h2>
+        <p class="question-hint">We'll email you the full audit within 48 hours. Make sure it's an address you actually check.</p>
+
+        <div class="field-group">
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" id="email" placeholder="you@company.com" autocomplete="email" />
+          </div>
+        </div>
+
+        <p class="error-msg" id="err-6">Please enter a valid email address.</p>
+
+        <div class="nav-row">
+          <button class="btn-back" onclick="goTo(5)">Back</button>
+          <button class="btn-primary" onclick="submitForm()">
+            Send my audit
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Page 7: Thank you -->
+      <div class="page" id="page-7">
+        <div class="ty-icon">
+          <svg viewBox="0 0 28 28" fill="none"><polyline points="4,14 10,20 24,8"/></svg>
+        </div>
+        <h2 class="ty-headline">You're all set, <span class="name-insert"></span>.</h2>
+        <p class="ty-sub">We've received everything we need. Your AI Automation Audit will land in your inbox within 48 hours — built specifically around your business.</p>
+
+        <div class="ty-steps">
+          <div class="ty-step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Check your inbox</strong> — your audit arrives within 48 hours. Check spam if you don't see it.</div>
+          </div>
+          <div class="ty-step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Review the findings</strong> — we'll show you the 3 highest-ROI automation opportunities specific to your business.</div>
+          </div>
+          <div class="ty-step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Book a call (optional)</strong> — if you want us to implement anything, we'll walk you through exactly how it works and what it costs. No pressure.</div>
+          </div>
+        </div>
+
+        <div class="ty-ps">
+          <strong>P.S.</strong> While you wait — follow <a href="https://linkedin.com/in/callumcrees" target="_blank">Callum on LinkedIn</a> for daily posts on AI automation, what's working for agencies and service businesses, and behind-the-scenes on what we're building at On Auto.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_PAGES = 7;
+    let currentPage = 1;
+
+    const roiValues = [
+      'Not sure yet',
+      '~£1,000/month',
+      '~£5,000/month',
+      '~£10,000/month',
+      '~£20,000/month',
+      '~£30,000/month',
+      '~£40,000/month',
+      '~£50,000/month',
+      '£50,000+/month'
+    ];
+
+    function updateROI(val) {
+      document.getElementById('roiDisplay').textContent = roiValues[val];
+    }
+
+    function getName() {
+      return document.getElementById('firstName').value.trim() || 'you';
+    }
+
+    function updateNameInserts() {
+      const name = getName();
+      document.querySelectorAll('.name-insert').forEach(el => {
+        el.textContent = name !== 'you' ? name : '';
+      });
+    }
+
+    function goTo(num) {
+      document.getElementById('page-' + currentPage).classList.remove('active');
+      currentPage = num;
+      document.getElementById('page-' + currentPage).classList.add('active');
+
+      // Update progress (pages 2–6 count as steps, page 1 = 0, page 7 = 100)
+      const progress = currentPage === 1 ? 0 : currentPage === 7 ? 100 : ((currentPage - 1) / 6) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+
+      updateNameInserts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleChoice(el) {
+      el.classList.toggle('selected');
+    }
+
+    function validateAndGo(from, to) {
+      const errEl = document.getElementById('err-' + from);
+      let valid = true;
+
+      if (from === 2) {
+        const fn = document.getElementById('firstName').value.trim();
+        const co = document.getElementById('companyName').value.trim();
+        const li = document.getElementById('linkedinUrl').value.trim();
+        if (!fn || !co || !li) valid = false;
+      }
+
+      if (from === 3) {
+        const ind = document.getElementById('industry').value;
+        const ts = document.getElementById('teamSize').value;
+        const desc = document.getElementById('bizDescription').value.trim();
+        if (!ind || !ts || !desc) valid = false;
+      }
+
+      if (from === 4) {
+        const selected = document.querySelectorAll('#pain-grid .choice-item.selected');
+        if (selected.length === 0) valid = false;
+      }
+
+      if (from === 5) {
+        const tech = document.getElementById('techStack').value.trim();
+        if (!tech) valid = false;
+      }
+
+      if (!valid) {
+        errEl.classList.add('visible');
+        return;
+      }
+
+      errEl.classList.remove('visible');
+      goTo(to);
+    }
+
+    function submitForm() {
+      const email = document.getElementById('email').value.trim();
+      const errEl = document.getElementById('err-6');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(email)) {
+        errEl.classList.add('visible');
+        return;
+      }
+
+      errEl.classList.remove('visible');
+
+      // Collect all form data
+      const formData = {
+        firstName: document.getElementById('firstName').value.trim(),
+        companyName: document.getElementById('companyName').value.trim(),
+        linkedinUrl: document.getElementById('linkedinUrl').value.trim(),
+        industry: document.getElementById('industry').value,
+        teamSize: document.getElementById('teamSize').value,
+        bizDescription: document.getElementById('bizDescription').value.trim(),
+        painPoints: Array.from(document.querySelectorAll('#pain-grid .choice-item.selected')).map(el => el.dataset.value),
+        painOther: document.getElementById('painOther').value.trim(),
+        techStack: document.getElementById('techStack').value.trim(),
+        roiValue: roiValues[document.getElementById('roiSlider').value],
+        email: email,
+        submittedAt: new Date().toISOString()
+      };
+
+      // Log to console (replace with your webhook / API call)
+      console.log('Form submission:', JSON.stringify(formData, null, 2));
+
+      // TODO: Send to your webhook here
+      // fetch('YOUR_WEBHOOK_URL', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData)
+      // });
+
+      goTo(7);
+    }
+
+    // Init
+    updateROI(2);
+  </script>
+</body>
+</html>

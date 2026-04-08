@@ -5,167 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free AI Guide — On Auto</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Exo+2:wght@800;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #060e1c;
-      --surface: #0b1828;
-      --surface-2: #0e2038;
-      --surface-alt: #071222;
-      --border: #162438;
-      --border-active: #1e3a5f;
+      --band: #0d1830;
+      --bg: #0a0a0a;
+      --input-bg: #161616;
       --accent: #1d6fe8;
       --accent-hover: #3585f0;
-      --accent-light: rgba(29, 111, 232, 0.1);
-      --accent-glow: rgba(29, 111, 232, 0.18);
       --text: #ffffff;
-      --text-muted: #a0b8d0;
-      --text-dim: #4a6680;
-      --radius: 12px;
+      --muted: #888888;
+      --dim: #444444;
+      --radius: 8px;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Background glow */
-    body::before {
-      content: '';
-      position: fixed;
-      top: -300px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 900px;
-      height: 700px;
-      background: radial-gradient(ellipse, rgba(29, 111, 232, 0.13) 0%, transparent 65%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      bottom: -200px;
-      right: -100px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(29, 111, 232, 0.06) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
     }
 
     /* Progress bar */
     .progress-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 2px;
-      background: var(--border);
-      z-index: 100;
+      background: #1a1a1a;
+      z-index: 200;
     }
-
     .progress-bar {
       height: 100%;
       background: linear-gradient(90deg, #1d6fe8, #3dabff);
       transition: width 0.4s ease;
     }
 
-    /* Logo bar */
-    .logo-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      padding: 18px 28px;
-      display: flex;
-      align-items: center;
-      z-index: 99;
-      background: linear-gradient(to bottom, rgba(6,14,28,0.95) 0%, transparent 100%);
+    /* Pages */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ─── COVER PAGE ─────────────────────────── */
+    #page-1 {
+      display: none;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 24px 60px;
+    }
+    #page-1.active { display: flex; }
+
+    .cover-inner {
+      width: 100%;
+      max-width: 600px;
     }
 
-    .logo {
+    .cover-logo {
       display: flex;
       align-items: center;
       gap: 0;
+      margin-bottom: 40px;
     }
-
-    .logo-word {
-      font-family: 'Exo 2', 'Inter', sans-serif;
-      font-size: 20px;
+    .cover-logo-word {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 22px;
       font-weight: 900;
       letter-spacing: 3px;
-      color: #ffffff;
+      color: #fff;
       text-transform: uppercase;
       line-height: 1;
     }
-
-    .logo-icon {
-      width: 18px;
-      height: 22px;
+    .cover-logo-icon {
+      width: 20px;
+      height: 24px;
       margin: 0 2px;
       position: relative;
       top: -1px;
     }
 
-    /* Main layout */
-    .form-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 90px 24px 60px;
-      min-height: 100vh;
-      position: relative;
-      z-index: 1;
-    }
-
-    .form-inner {
-      width: 100%;
-      max-width: 620px;
-    }
-
-    /* Pages */
-    .page {
-      display: none;
-      animation: fadeUp 0.35s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Cover page */
     .cover-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: var(--accent-light);
-      border: 1px solid rgba(29, 111, 232, 0.2);
+      background: rgba(29,111,232,0.1);
+      border: 1px solid rgba(29,111,232,0.2);
       color: #5da8ff;
       font-size: 11px;
       font-weight: 600;
@@ -175,14 +99,12 @@
       border-radius: 100px;
       margin-bottom: 28px;
     }
-
     .cover-tag::before {
       content: '';
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       background: #1d6fe8;
       border-radius: 50%;
-      box-shadow: 0 0 6px rgba(29, 111, 232, 0.8);
+      box-shadow: 0 0 6px rgba(29,111,232,0.8);
     }
 
     .cover-headline {
@@ -191,9 +113,7 @@
       line-height: 1.18;
       letter-spacing: -0.6px;
       margin-bottom: 18px;
-      color: var(--text);
     }
-
     .cover-headline em {
       font-style: normal;
       background: linear-gradient(135deg, #1d6fe8 0%, #3dabff 100%);
@@ -206,7 +126,7 @@
       font-size: 16px;
       color: #8ab0cc;
       line-height: 1.7;
-      margin-bottom: 36px;
+      margin-bottom: 40px;
       max-width: 500px;
     }
 
@@ -219,542 +139,9 @@
       margin-bottom: 16px;
     }
 
-    .cover-bullets {
-      list-style: none;
-      margin-bottom: 36px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-    }
-
-    .cover-bullets li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .bullet-icon {
-      width: 18px;
-      height: 18px;
-      background: var(--accent-light);
-      border: 1px solid rgba(29, 111, 232, 0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .bullet-icon svg {
-      width: 9px;
-      height: 9px;
-      stroke: #3dabff;
-      stroke-width: 2.5;
-    }
-
-    .testimonials {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 36px;
-    }
-
-    .testimonial {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      transition: border-color 0.2s;
-    }
-
-    .testimonial:hover {
-      border-color: var(--border-active);
-      border-left-color: var(--accent-hover);
-    }
-
-    .testimonial-text {
-      font-size: 14px;
-      color: #c8ddf0;
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-
-    .testimonial-author {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .author-avatar {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, rgba(29,111,232,0.2), rgba(61,171,255,0.2));
-      border: 1px solid rgba(29,111,232,0.3);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #3dabff;
-    }
-
-    .author-info {
-      font-size: 13px;
-    }
-
-    .author-name {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .author-role {
-      color: var(--text-muted);
-      font-size: 12px;
-      margin-top: 1px;
-    }
-
-    /* Question pages */
-    .question-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 22px;
-    }
-
-    .question-title {
-      font-size: clamp(20px, 4vw, 26px);
-      font-weight: 800;
-      line-height: 1.25;
-      letter-spacing: -0.4px;
-      margin-bottom: 10px;
-      color: var(--text);
-    }
-
-    .question-hint {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 30px;
-    }
-
-    /* Inputs */
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 30px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .field label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
-    }
-
-    .field input,
-    .field textarea,
-    .field select {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 15px;
-      padding: 14px 16px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      width: 100%;
-    }
-
-    .field input:focus,
-    .field textarea:focus,
-    .field select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-light);
-    }
-
-    .field textarea {
-      resize: vertical;
-      min-height: 110px;
-      line-height: 1.6;
-    }
-
-    .field select option {
-      background: #0d1a2d;
-    }
-
-    input::placeholder,
-    textarea::placeholder {
-      color: var(--text-dim);
-    }
-
-    /* Choice grid */
-    .choice-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 9px;
-      margin-bottom: 28px;
-    }
-
-    .choice-grid.single-col {
-      grid-template-columns: 1fr;
-    }
-
-    .choice-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 15px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-size: 13.5px;
-      color: var(--text-muted);
-      user-select: none;
-      line-height: 1.4;
-    }
-
-    .choice-item:hover {
-      border-color: var(--border-active);
-      background: var(--surface-2);
-      color: var(--text);
-    }
-
-    .choice-item.selected {
-      border-color: var(--accent);
-      background: var(--accent-light);
-      color: var(--text);
-      box-shadow: 0 0 0 1px rgba(29,111,232,0.2);
-    }
-
-    .choice-check {
-      width: 18px;
-      height: 18px;
-      border: 1.5px solid var(--border-active);
-      border-radius: 5px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-    }
-
-    .choice-item.selected .choice-check {
-      background: var(--accent);
-      border-color: var(--accent);
-      box-shadow: 0 0 8px rgba(29,111,232,0.4);
-    }
-
-    .choice-check svg {
-      width: 10px;
-      height: 10px;
-      stroke: white;
-      stroke-width: 2.5;
-      opacity: 0;
-    }
-
-    .choice-item.selected .choice-check svg {
-      opacity: 1;
-    }
-
-    /* Radio style for single select */
-    .radio-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 15px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-size: 14px;
-      color: var(--text-muted);
-      user-select: none;
-      margin-bottom: 9px;
-    }
-
-    .radio-item:hover {
-      border-color: var(--border-active);
-      background: var(--surface-2);
-      color: var(--text);
-    }
-
-    .radio-item.selected {
-      border-color: var(--accent);
-      background: var(--accent-light);
-      color: var(--text);
-    }
-
-    .radio-dot {
-      width: 18px;
-      height: 18px;
-      border: 1.5px solid var(--border-active);
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
-    }
-
-    .radio-item.selected .radio-dot {
-      border-color: var(--accent);
-    }
-
-    .radio-dot-inner {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .radio-item.selected .radio-dot-inner {
-      opacity: 1;
-    }
-
-    /* Range slider */
-    .range-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-dim);
-      margin-top: 8px;
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 4px;
-      background: var(--border);
-      border-radius: 2px;
-      outline: none;
-      margin: 16px 0 4px;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 22px;
-      height: 22px;
-      background: var(--accent);
-      border-radius: 50%;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(29,111,232,0.5);
-    }
-
-    .range-value {
-      font-size: 24px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #1d6fe8, #3dabff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 4px;
-      letter-spacing: -0.5px;
-    }
-
-    /* Buttons */
-    .btn-primary {
-      background: linear-gradient(135deg, #1d6fe8 0%, #2a7ef5 100%);
-      color: white;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 600;
-      border: none;
-      border-radius: var(--radius);
-      padding: 15px 28px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 20px rgba(29,111,232,0.3);
-      letter-spacing: 0.1px;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #2a7ef5 0%, #3d8ef8 100%);
-      box-shadow: 0 6px 28px rgba(29,111,232,0.45);
-      transform: translateY(-1px);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.98) translateY(0);
-      box-shadow: 0 2px 12px rgba(29,111,232,0.3);
-    }
-
-    .btn-primary svg {
-      width: 16px;
-      height: 16px;
-      stroke: white;
-      stroke-width: 2.5;
-    }
-
-    .nav-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn-back {
-      background: transparent;
-      color: var(--text-muted);
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 18px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-back:hover {
-      border-color: var(--border-active);
-      color: var(--text);
-      background: var(--surface);
-    }
-
-    /* Thank you page */
-    .ty-icon {
-      width: 68px;
-      height: 68px;
-      background: var(--accent-light);
-      border: 1px solid rgba(29,111,232,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 28px;
-      box-shadow: 0 0 30px rgba(29,111,232,0.15);
-    }
-
-    .ty-icon svg {
-      width: 28px;
-      height: 28px;
-      stroke: #3dabff;
-      stroke-width: 2.5;
-    }
-
-    .ty-headline {
-      font-size: clamp(22px, 4vw, 30px);
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 14px;
-      color: var(--text);
-    }
-
-    .ty-sub {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 36px;
-      max-width: 460px;
-    }
-
-    .ty-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 40px;
-    }
-
-    .ty-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-    }
-
-    .step-num {
-      width: 26px;
-      height: 26px;
-      background: var(--accent-light);
-      border: 1px solid rgba(29,111,232,0.25);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #3dabff;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    .step-text {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.55;
-    }
-
-    .step-text strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .ty-ps {
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.65;
-    }
-
-    .ty-ps a {
-      color: #3dabff;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .ty-ps a:hover {
-      text-decoration: underline;
-    }
-
-    /* Error state */
-    .error-msg {
-      font-size: 13px;
-      color: #f87171;
-      margin-top: 8px;
-      display: none;
-    }
-
-    .error-msg.visible {
-      display: block;
-    }
-
-    /* Section divider */
     .section-divider {
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+      background: linear-gradient(90deg, transparent, #1e3352 30%, #1e3352 70%, transparent);
       margin: 32px 0;
     }
 
@@ -765,622 +152,585 @@
       gap: 8px;
       margin-bottom: 4px;
     }
-
     .included-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-top: 2px solid var(--border-active);
+      background: #0b1828;
+      border: 1px solid #162438;
+      border-top: 2px solid #1e3a5f;
       border-radius: var(--radius);
       padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-top-color 0.2s;
     }
+    .included-item:hover { border-top-color: var(--accent); }
+    .included-num { font-size: 10px; font-weight: 800; color: #3d8ef0; letter-spacing: 1.5px; }
+    .included-text { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.5; }
 
-    .included-item:hover {
-      background: var(--surface-2);
-      border-top-color: var(--accent);
-    }
-
-    .included-num {
-      font-size: 10px;
-      font-weight: 800;
-      color: #3d8ef0;
-      letter-spacing: 1.5px;
-    }
-
-    .included-text {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      line-height: 1.5;
-    }
-
-    /* How it works — distinct band */
+    /* How it works */
     .how-band {
-      background: linear-gradient(135deg, #0a1e3a 0%, #0c2040 50%, #0a1e3a 100%);
+      background: linear-gradient(135deg, #0a1e3a, #0c2040, #0a1e3a);
       border: 1px solid #1e3a5f;
       border-radius: 16px;
       padding: 28px 24px;
       margin-bottom: 4px;
     }
-
-    .how-steps {
-      display: flex;
-      align-items: flex-start;
-      gap: 0;
-    }
-
-    .how-step {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-    }
-
+    .how-steps { display: flex; align-items: flex-start; }
+    .how-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
     .how-num {
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       background: linear-gradient(135deg, #1d6fe8, #2a7ef5);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
-      color: #ffffff;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800; color: #fff;
       box-shadow: 0 4px 16px rgba(29,111,232,0.35);
     }
-
-    .how-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #ffffff;
-      display: block;
-      line-height: 1.3;
-    }
-
-    .how-sub {
-      font-size: 12px;
-      color: #7a9bbf;
-      display: block;
-      line-height: 1.4;
-      margin-top: -4px;
-    }
-
-    .how-connector {
-      flex-shrink: 0;
-      width: 40px;
-      margin-top: 24px;
-      opacity: 0.5;
-    }
+    .how-title { font-size: 13px; font-weight: 700; color: #fff; display: block; line-height: 1.3; }
+    .how-sub { font-size: 12px; color: #7a9bbf; display: block; margin-top: -4px; }
+    .how-connector { flex-shrink: 0; width: 40px; margin-top: 24px; opacity: 0.5; }
 
     /* Testimonials */
-    .testimonials {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
+    .testimonials { display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px; }
     .testimonial {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: #0b1828;
+      border: 1px solid #162438;
       border-radius: var(--radius);
       padding: 22px 20px;
       position: relative;
       overflow: hidden;
     }
-
     .testimonial::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, var(--accent), #3dabff);
+      background: linear-gradient(90deg, #1d6fe8, #3dabff);
     }
-
-    .stars {
-      font-size: 14px;
-      color: #f5b731;
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      display: block;
+    .stars { font-size: 14px; color: #f5b731; letter-spacing: 2px; margin-bottom: 12px; display: block; }
+    .quote-mark { font-size: 72px; line-height: 0.5; color: #1d6fe8; opacity: 0.2; font-family: Georgia, serif; margin-bottom: 14px; display: block; }
+    .testimonial-text { font-size: 14px; color: #c8ddf0; line-height: 1.7; margin-bottom: 16px; }
+    .testimonial-author { display: flex; align-items: center; gap: 10px; }
+    .author-avatar {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, rgba(29,111,232,0.2), rgba(61,171,255,0.2));
+      border: 1px solid rgba(29,111,232,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #3dabff;
     }
+    .author-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .author-role { font-size: 12px; color: #5d7da0; margin-top: 1px; }
 
-    .quote-mark {
-      font-size: 72px;
-      line-height: 0.5;
-      color: var(--accent);
-      opacity: 0.2;
-      font-family: Georgia, serif;
-      margin-bottom: 14px;
-      display: block;
-    }
-
-    /* CTA block */
-    .cta-block {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      padding-top: 4px;
-    }
-
-    .btn-full {
+    /* Cover CTA */
+    .cta-block { display: flex; flex-direction: column; align-items: center; gap: 14px; padding-top: 4px; }
+    .btn-cover {
       width: 100%;
-      justify-content: center;
-      padding: 17px 32px;
+      background: linear-gradient(135deg, #1d6fe8, #2a7ef5);
+      color: #fff;
+      font-family: inherit;
       font-size: 16px;
       font-weight: 700;
-      border-radius: 14px;
+      border: none;
+      border-radius: 12px;
+      padding: 17px 32px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(29,111,232,0.3);
+      transition: all 0.2s;
+    }
+    .btn-cover:hover { background: linear-gradient(135deg, #2a7ef5, #3d8ef8); box-shadow: 0 6px 28px rgba(29,111,232,0.45); transform: translateY(-1px); }
+    .btn-cover svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 2.5; }
+    .cta-sub { font-size: 12px; color: #444; text-align: center; }
+
+    /* ─── QUESTION PAGES ─────────────────────── */
+    .q-page { display: none; min-height: 100vh; }
+    .q-page.active { display: block; animation: fadeIn 0.25s ease; }
+
+    .q-band {
+      height: 130px;
+      background: var(--band);
+      width: 100%;
     }
 
-    .cta-sub {
-      font-size: 12px;
-      color: var(--text-dim);
-      text-align: center;
-      letter-spacing: 0.3px;
+    .q-logo-row {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
     }
+
+    .q-logo-circle {
+      width: 90px;
+      height: 90px;
+      background: var(--bg);
+      border: 4px solid var(--bg);
+      border-radius: 50%;
+      margin-top: -45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .q-logo-inner {
+      width: 72px;
+      height: 72px;
+      background: #0d1830;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .q-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 24px 32px 80px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .back-btn:hover { color: #fff; }
+
+    .accent-head {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    .q-block { margin-bottom: 28px; }
+
+    .q-label {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .req { color: var(--accent); }
+
+    .q-input {
+      background: var(--input-bg);
+      border: 1.5px solid transparent;
+      border-radius: var(--radius);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 14px 16px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s;
+      display: block;
+    }
+    .q-input:focus { border-color: var(--accent); }
+    .q-input::placeholder { color: var(--dim); }
+
+    textarea.q-input {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.6;
+    }
+
+    .q-hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .btn-next {
+      background: var(--accent);
+      color: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius);
+      padding: 13px 22px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+    .btn-next:hover { background: var(--accent-hover); }
+    .btn-next:active { transform: scale(0.97); }
+
+    .error-msg {
+      font-size: 13px;
+      color: #f87171;
+      margin-top: 8px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* Thank you page content (uses q-page layout) */
+    .ty-body { padding-top: 8px; }
+    .ty-headline { font-size: 28px; font-weight: 600; color: #fff; margin-bottom: 28px; line-height: 1.3; }
+    .ty-para { font-size: 16px; color: #fff; line-height: 1.7; margin-bottom: 20px; }
+    .ty-para a { color: var(--accent); text-decoration: none; }
+    .ty-para a:hover { text-decoration: underline; }
+    .ty-highlight {
+      background: var(--accent);
+      color: #fff;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    .ty-ps-block {
+      border-top: 1px solid #1a1a1a;
+      margin-top: 32px;
+      padding-top: 24px;
+    }
+    .ty-ps-block p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 10px; font-style: italic; }
 
     /* Mobile */
-    @media (max-width: 520px) {
-      .choice-grid {
-        grid-template-columns: 1fr;
-      }
-      .included-grid {
-        grid-template-columns: 1fr;
-      }
-      .how-steps {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-      }
-      .how-connector {
-        display: none;
-      }
-      .how-step {
-        flex-direction: row;
-        text-align: left;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 14px;
-        gap: 14px;
-      }
-      .how-num {
-        flex-shrink: 0;
-      }
+    @media (max-width: 540px) {
+      .included-grid { grid-template-columns: 1fr; }
+      .how-steps { flex-direction: column; align-items: stretch; gap: 12px; }
+      .how-connector { display: none; }
+      .how-step { flex-direction: row; text-align: left; background: #0b1e38; border: 1px solid #1e3a5f; border-radius: 10px; padding: 14px; gap: 14px; }
+      .how-num { flex-shrink: 0; }
+      .q-content { padding: 20px 20px 60px; }
+      .q-logo-row { padding: 0 20px; }
+      .q-label { font-size: 18px; }
+      .accent-head { font-size: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Progress bar -->
   <div class="progress-container">
     <div class="progress-bar" id="progressBar" style="width: 0%"></div>
   </div>
 
-  <!-- Logo -->
-  <div class="logo-bar">
-    <div class="logo">
-      <span class="logo-word">ON</span>
-      <svg class="logo-icon" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Triangle body -->
-        <line x1="11" y1="3" x2="2" y2="23" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="11" y1="3" x2="20" y2="23" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
-        <line x1="5.5" y1="16" x2="16.5" y2="16" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
-        <!-- Nodes -->
-        <circle cx="11" cy="3" r="3" fill="#5ab4ff"/>
-        <circle cx="2" cy="23" r="3" fill="#1d6fe8"/>
-        <circle cx="20" cy="23" r="3" fill="#1d6fe8"/>
-        <defs>
-          <linearGradient id="lg" x1="11" y1="3" x2="11" y2="23" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#5ab4ff"/>
-            <stop offset="100%" stop-color="#1d6fe8"/>
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="logo-word">UTO</span>
-    </div>
-  </div>
+  <!-- PAGE 1: Cover -->
+  <div class="page active" id="page-1">
+    <div class="cover-inner">
 
-  <!-- Form -->
-  <div class="form-wrapper">
-    <div class="form-inner">
+      <div class="cover-logo">
+        <span class="cover-logo-word">ON</span>
+        <svg class="cover-logo-icon" viewBox="0 0 22 26" fill="none">
+          <line x1="11" y1="3" x2="2" y2="23" stroke="url(#cg)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="11" y1="3" x2="20" y2="23" stroke="url(#cg)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="5.5" y1="16" x2="16.5" y2="16" stroke="url(#cg)" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="11" cy="3" r="3" fill="#5ab4ff"/>
+          <circle cx="2" cy="23" r="3" fill="#1d6fe8"/>
+          <circle cx="20" cy="23" r="3" fill="#1d6fe8"/>
+          <defs>
+            <linearGradient id="cg" x1="11" y1="3" x2="11" y2="23" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#5ab4ff"/>
+              <stop offset="100%" stop-color="#1d6fe8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="cover-logo-word">UTO</span>
+      </div>
 
-      <!-- Page 1: Cover -->
-      <div class="page active" id="page-1">
+      <div class="cover-tag">Free guide</div>
+      <h1 class="cover-headline">7 Ways to Find Out Exactly Where <em>AI Can Give You Your Time Back</em></h1>
+      <p class="cover-sub">Answer 5 questions. We'll build a custom blueprint showing where AI can cut your workload, what each one is worth, and how to actually do it.</p>
 
-        <!-- Hero -->
-        <div class="cover-tag">Free guide</div>
-        <h1 class="cover-headline">7 Ways to Find Out Exactly Where <em>AI Can Give You Your Time Back</em></h1>
-        <p class="cover-sub">Answer 5 questions. We'll build a custom blueprint showing where AI can cut your workload, what each one is worth, and how to actually do it.</p>
+      <div class="section-divider"></div>
+      <p class="section-label">What's included</p>
+      <div class="included-grid">
+        <div class="included-item"><div class="included-num">01</div><div class="included-text">7 ways AI is already being used in your industry</div></div>
+        <div class="included-item"><div class="included-num">02</div><div class="included-text">7 automation fixes for your specific time drains</div></div>
+        <div class="included-item"><div class="included-num">03</div><div class="included-text">Step-by-step build instructions for each one</div></div>
+        <div class="included-item"><div class="included-num">04</div><div class="included-text">A custom rollout roadmap for your business</div></div>
+        <div class="included-item"><div class="included-num">05</div><div class="included-text">Hours saved per week for each automation</div></div>
+        <div class="included-item"><div class="included-num">06</div><div class="included-text">Revenue or cost impact estimate for each one</div></div>
+      </div>
 
-        <!-- What's included -->
-        <div class="section-divider"></div>
-        <p class="section-label">What's included</p>
-        <div class="included-grid">
-          <div class="included-item">
-            <div class="included-num">01</div>
-            <div class="included-text">7 ways AI is already being used in your industry</div>
-          </div>
-          <div class="included-item">
-            <div class="included-num">02</div>
-            <div class="included-text">7 automation fixes for your specific time drains</div>
-          </div>
-          <div class="included-item">
-            <div class="included-num">03</div>
-            <div class="included-text">Step-by-step build instructions for each one</div>
-          </div>
-          <div class="included-item">
-            <div class="included-num">04</div>
-            <div class="included-text">A custom rollout roadmap for your business</div>
-          </div>
-          <div class="included-item">
-            <div class="included-num">05</div>
-            <div class="included-text">Hours saved per week for each automation</div>
-          </div>
-          <div class="included-item">
-            <div class="included-num">06</div>
-            <div class="included-text">Revenue or cost impact estimate for each one</div>
-          </div>
-        </div>
-
-        <!-- How it works -->
-        <div class="section-divider"></div>
-        <p class="section-label">How it works</p>
-        <div class="how-band">
+      <div class="section-divider"></div>
+      <p class="section-label">How it works</p>
+      <div class="how-band">
         <div class="how-steps">
           <div class="how-step">
             <div class="how-num">1</div>
             <strong class="how-title">Fill out the form</strong>
             <span class="how-sub">5 questions, 3 minutes</span>
           </div>
-          <div class="how-connector">
-            <svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
-          </div>
+          <div class="how-connector"><svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg></div>
           <div class="how-step">
             <div class="how-num">2</div>
             <strong class="how-title">We build your blueprint</strong>
             <span class="how-sub">Custom to your industry</span>
           </div>
-          <div class="how-connector">
-            <svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
-          </div>
+          <div class="how-connector"><svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg></div>
           <div class="how-step">
             <div class="how-num">3</div>
             <strong class="how-title">It lands in your inbox</strong>
             <span class="how-sub">Full breakdown + roadmap</span>
           </div>
         </div>
-        </div>
+      </div>
 
-        <!-- Testimonials -->
-        <div class="section-divider"></div>
-        <p class="section-label">What others are saying</p>
-        <div class="testimonials">
-          <div class="testimonial">
-            <div class="stars">★★★★★</div>
-            <div class="quote-mark">"</div>
-            <p class="testimonial-text">Went through it and realised half the stuff eating my week didn't need to involve me at all. Don't have to think about follow-up or chasing quotes anymore. It just gets handled. I'm doing the actual job again.</p>
-            <div class="testimonial-author">
-              <div class="author-avatar">JS</div>
-              <div class="author-info">
-                <div class="author-name">Joao Sousa</div>
-                <div class="author-role">Signature Decorators Limited</div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial">
-            <div class="stars">★★★★★</div>
-            <div class="quote-mark">"</div>
-            <p class="testimonial-text">Ran the reactivation plan from the blueprint on my whole lead list. Booked 11 calls in 10 days from people I thought had gone cold. Wish I'd done it sooner.</p>
-            <div class="testimonial-author">
-              <div class="author-avatar">CR</div>
-              <div class="author-info">
-                <div class="author-name">Charlie Richardson</div>
-                <div class="author-role">Close Real Sales</div>
-              </div>
+      <div class="section-divider"></div>
+      <p class="section-label">What others are saying</p>
+      <div class="testimonials">
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">Went through it and realised half the stuff eating my week didn't need to involve me at all. Don't have to think about follow-up or chasing quotes anymore. It just gets handled. I'm doing the actual job again.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">JS</div>
+            <div>
+              <div class="author-name">Joao Sousa</div>
+              <div class="author-role">Signature Decorators Limited</div>
             </div>
           </div>
         </div>
-
-        <!-- CTA -->
-        <div class="section-divider"></div>
-        <div class="cta-block">
-          <button class="btn-primary btn-full" onclick="goTo(2)">
-            Get my free guide
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
-          <p class="cta-sub">Takes 3 minutes &nbsp;·&nbsp; Free &nbsp;·&nbsp; No obligation</p>
-        </div>
-
-      </div>
-
-      <!-- Page 2: Contact -->
-      <div class="page" id="page-2">
-        <div class="question-label">Step 1 of 5</div>
-        <h2 class="question-title">First, let's get your details</h2>
-        <p class="question-hint">We'll use these to build your guide and send it over when it's ready.</p>
-
-        <div class="field-group">
-          <div class="field">
-            <label>Your first name</label>
-            <input type="text" id="firstName" placeholder="e.g. James" autocomplete="given-name" />
+        <div class="testimonial">
+          <div class="stars">★★★★★</div>
+          <div class="quote-mark">"</div>
+          <p class="testimonial-text">Ran the reactivation plan from the blueprint on my whole lead list. Booked 11 calls in 10 days from people I thought had gone cold. Wish I'd done it sooner.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">CR</div>
+            <div>
+              <div class="author-name">Charlie Richardson</div>
+              <div class="author-role">Close Real Sales</div>
+            </div>
           </div>
-          <div class="field">
-            <label>Company name</label>
-            <input type="text" id="companyName" placeholder="e.g. Apex Media" autocomplete="organization" />
-          </div>
-          <div class="field">
-            <label>LinkedIn URL <span style="color: var(--text-dim); font-weight: 400;">(so we can review your business before the audit)</span></label>
-            <input type="url" id="linkedinUrl" placeholder="linkedin.com/in/yourname" />
-          </div>
-        </div>
-
-        <p class="error-msg" id="err-2">Please fill in all fields above to continue.</p>
-
-        <div class="nav-row">
-          <button class="btn-back" onclick="goTo(1)">Back</button>
-          <button class="btn-primary" onclick="validateAndGo(2, 3)">
-            Continue
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
         </div>
       </div>
 
-      <!-- Page 3: Business context -->
-      <div class="page" id="page-3">
-        <div class="question-label">Step 2 of 5</div>
-        <h2 class="question-title" id="q3-title">What does your business do, <span class="name-insert"></span>?</h2>
-        <p class="question-hint">The more specific you are, the more useful your guide will be.</p>
-
-        <div class="field-group">
-          <div class="field">
-            <label>Industry / type of business</label>
-            <select id="industry">
-              <option value="" disabled selected>Select your industry</option>
-              <option>Agency (marketing, creative, web)</option>
-              <option>Coaching / consulting</option>
-              <option>Real estate</option>
-              <option>SaaS / tech</option>
-              <option>E-commerce / retail</option>
-              <option>Financial services</option>
-              <option>Healthcare / wellness</option>
-              <option>Recruitment / staffing</option>
-              <option>Trades / home services</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Team size</label>
-            <select id="teamSize">
-              <option value="" disabled selected>Select team size</option>
-              <option>Just me</option>
-              <option>2–5 people</option>
-              <option>6–15 people</option>
-              <option>16–50 people</option>
-              <option>50+ people</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>Brief description of what you do</label>
-            <textarea id="bizDescription" placeholder="e.g. We run paid ads for e-commerce brands and manage about 30 clients. Most of our time goes on reporting, client comms, and campaign management."></textarea>
-          </div>
-        </div>
-
-        <p class="error-msg" id="err-3">Please fill in all fields above.</p>
-
-        <div class="nav-row">
-          <button class="btn-back" onclick="goTo(2)">Back</button>
-          <button class="btn-primary" onclick="validateAndGo(3, 4)">
-            Continue
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Page 4: Pain points -->
-      <div class="page" id="page-4">
-        <div class="question-label">Step 3 of 5</div>
-        <h2 class="question-title">Where's the biggest drag on your time right now?</h2>
-        <p class="question-hint">Select all that apply. This shapes which automations we cover first in your guide.</p>
-
-        <div class="choice-grid" id="pain-grid">
-          <div class="choice-item" data-value="lead-followup" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Lead follow-up & nurture</span>
-          </div>
-          <div class="choice-item" data-value="speed-to-lead" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Slow response to inbound leads</span>
-          </div>
-          <div class="choice-item" data-value="admin" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Admin & data entry</span>
-          </div>
-          <div class="choice-item" data-value="reporting" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Reporting & analytics</span>
-          </div>
-          <div class="choice-item" data-value="client-comms" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Client communication & updates</span>
-          </div>
-          <div class="choice-item" data-value="onboarding" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Client / customer onboarding</span>
-          </div>
-          <div class="choice-item" data-value="booking" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Appointment booking & reminders</span>
-          </div>
-          <div class="choice-item" data-value="reactivation" onclick="toggleChoice(this)">
-            <div class="choice-check"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg></div>
-            <span>Reactivating old leads / customers</span>
-          </div>
-        </div>
-
-        <div class="field" style="margin-bottom: 32px;">
-          <label>Anything else? <span style="color: var(--text-dim); font-weight: 400;">(optional)</span></label>
-          <textarea id="painOther" placeholder="Describe any specific bottlenecks, frustrations, or tasks that eat your time..." style="min-height: 80px;"></textarea>
-        </div>
-
-        <p class="error-msg" id="err-4">Please select at least one area above.</p>
-
-        <div class="nav-row">
-          <button class="btn-back" onclick="goTo(3)">Back</button>
-          <button class="btn-primary" onclick="validateAndGo(4, 5)">
-            Continue
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Page 5: Tools + value -->
-      <div class="page" id="page-5">
-        <div class="question-label">Step 4 of 5</div>
-        <h2 class="question-title">What tools does your business currently run on?</h2>
-        <p class="question-hint">CRM, comms tools, anything relevant. We'll build your guide around what you already use. No ripping anything out.</p>
-
-        <div class="field-group" style="margin-bottom: 24px;">
-          <div class="field">
-            <label>Current tools / tech stack</label>
-            <textarea id="techStack" placeholder="e.g. HubSpot CRM, Slack, Google Sheets, Calendly, Xero. No dedicated follow-up automation yet."></textarea>
-          </div>
-        </div>
-
-        <h2 class="question-title" style="margin-bottom: 10px;">If those problems were gone, what's that worth to you?</h2>
-        <p class="question-hint">Rough estimate is fine. Helps us focus on the highest-impact stuff first.</p>
-
-        <div class="field" style="margin-bottom: 32px;">
-          <div class="range-value" id="roiDisplay">~£5,000/month</div>
-          <input type="range" id="roiSlider" min="0" max="8" step="1" value="2" oninput="updateROI(this.value)" />
-          <div class="range-labels">
-            <span>Not sure</span>
-            <span>£50k+/month</span>
-          </div>
-        </div>
-
-        <p class="error-msg" id="err-5">Please fill in your tech stack above.</p>
-
-        <div class="nav-row">
-          <button class="btn-back" onclick="goTo(4)">Back</button>
-          <button class="btn-primary" onclick="validateAndGo(5, 6)">
-            Continue
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Page 6: Email -->
-      <div class="page" id="page-6">
-        <div class="question-label">Step 5 of 5 — Last one</div>
-        <h2 class="question-title">Where should we send your guide, <span class="name-insert"></span>?</h2>
-        <p class="question-hint">Make sure it's an address you actually check.</p>
-
-        <div class="field-group">
-          <div class="field">
-            <label>Email address</label>
-            <input type="email" id="email" placeholder="you@company.com" autocomplete="email" />
-          </div>
-        </div>
-
-        <p class="error-msg" id="err-6">Please enter a valid email address.</p>
-
-        <div class="nav-row">
-          <button class="btn-back" onclick="goTo(5)">Back</button>
-          <button class="btn-primary" onclick="submitForm()">
-            Send my guide
-            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Page 7: Thank you -->
-      <div class="page" id="page-7">
-        <div class="ty-icon">
-          <svg viewBox="0 0 28 28" fill="none"><polyline points="4,14 10,20 24,8"/></svg>
-        </div>
-        <h2 class="ty-headline">You're in, <span class="name-insert"></span>.</h2>
-        <p class="ty-sub">We've got your answers. We'll review them and be in touch with your custom blueprint shortly.</p>
-
-        <div class="ty-steps">
-          <div class="ty-step">
-            <div class="step-num">1</div>
-            <div class="step-text"><strong>Check your inbox.</strong> Your guide is on its way. Check spam if you don't see it.</div>
-          </div>
-          <div class="ty-step">
-            <div class="step-num">2</div>
-            <div class="step-text"><strong>Review the blueprint.</strong> It'll show you exactly where to start and what each automation is worth to your business.</div>
-          </div>
-          <div class="ty-step">
-            <div class="step-num">3</div>
-            <div class="step-text"><strong>Want us to build it?</strong> Book a call and we'll walk you through what's involved. No obligation.</div>
-          </div>
-        </div>
-
-        <div class="ty-ps">
-          <strong>P.S.</strong> Follow <a href="https://linkedin.com/in/callumcrees" target="_blank">Callum on LinkedIn</a> for posts on what's actually working in AI automation right now, across agencies, service businesses, and sales teams.
-        </div>
+      <div class="section-divider"></div>
+      <div class="cta-block">
+        <button class="btn-cover" onclick="goTo(2)">
+          Get my free guide
+          <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+        </button>
+        <p class="cta-sub">Takes 3 minutes &nbsp;·&nbsp; Free &nbsp;·&nbsp; No obligation</p>
       </div>
 
     </div>
   </div>
 
+  <!-- PAGE 2: Name + Company + LinkedIn -->
+  <div class="q-page" id="page-2">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle">
+        <div class="q-logo-inner">
+          <svg width="44" height="32" viewBox="0 0 44 32" fill="none">
+            <text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text>
+            <line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg)" stroke-width="2" stroke-linecap="round"/>
+            <line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg)" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/>
+            <circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/>
+            <circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/>
+            <text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text>
+            <defs>
+              <linearGradient id="qg" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#5ab4ff"/>
+                <stop offset="100%" stop-color="#1d6fe8"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="q-content">
+      <button class="back-btn" onclick="goTo(1)">← Back</button>
+
+      <div class="q-block">
+        <label class="q-label">What's your name? <span class="req">*</span></label>
+        <input class="q-input" type="text" id="firstName" placeholder="First and last" autocomplete="name"/>
+        <p class="q-hint">First and last</p>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">What's the name of your company? <span class="req">*</span></label>
+        <input class="q-input" type="text" id="companyName" placeholder="e.g. Apex Media" autocomplete="organization"/>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">What is your LinkedIn URL? <span class="req">*</span></label>
+        <input class="q-input" type="url" id="linkedinUrl" placeholder="linkedin.com/in/yourname"/>
+        <p class="q-hint">NOTE: This must be a valid LinkedIn URL. Invalid URLs will not receive their Blueprint.</p>
+      </div>
+
+      <p class="error-msg" id="err-2">Please fill in all fields to continue.</p>
+      <button class="btn-next" onclick="validateAndGo(2, 3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Industry + Employees + Description -->
+  <div class="q-page" id="page-3">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="32" viewBox="0 0 44 32" fill="none"><text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text><line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg2)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg2)" stroke-width="2" stroke-linecap="round"/><line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg2)" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/><circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/><circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/><text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text><defs><linearGradient id="qg2" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5ab4ff"/><stop offset="100%" stop-color="#1d6fe8"/></linearGradient></defs></svg></div></div>
+    </div>
+    <div class="q-content">
+      <button class="back-btn" onclick="goTo(2)">← Back</button>
+
+      <div class="q-block">
+        <label class="q-label">What industry is your business in, <span class="name-insert"></span>? <span class="req">*</span></label>
+        <input class="q-input" type="text" id="industry" placeholder="e.g. Marketing Agency, Real Estate, SaaS..."/>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">How many employees does your company have? <span class="req">*</span></label>
+        <input class="q-input" type="text" id="teamSize" placeholder="e.g. 5"/>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">In 1 or 2 sentences, tell me about what your company does. Who do you serve? What do you sell? How do you deliver? <span class="req">*</span></label>
+        <textarea class="q-input" id="bizDescription" placeholder="We are a short-form content agency that produces performance ad creative for eCommerce brands..."></textarea>
+        <p class="q-hint">🧠 Hint: the more detailed your response is, the better your blueprint will be</p>
+      </div>
+
+      <p class="error-msg" id="err-3">Please fill in all fields to continue.</p>
+      <button class="btn-next" onclick="validateAndGo(3, 4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 4: Almost done — challenge + ROI -->
+  <div class="q-page" id="page-4">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="32" viewBox="0 0 44 32" fill="none"><text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text><line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg3)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg3)" stroke-width="2" stroke-linecap="round"/><line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg3)" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/><circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/><circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/><text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text><defs><linearGradient id="qg3" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5ab4ff"/><stop offset="100%" stop-color="#1d6fe8"/></linearGradient></defs></svg></div></div>
+    </div>
+    <div class="q-content">
+      <button class="back-btn" onclick="goTo(3)">← Back</button>
+      <h2 class="accent-head">Almost done!</h2>
+
+      <div class="q-block">
+        <label class="q-label">What is the #1 top business challenge you're facing right now? <span class="req">*</span></label>
+        <textarea class="q-input" id="topChallenge" placeholder="Our follow-up process is completely manual. Leads come in and half of them never get contacted quickly enough..."></textarea>
+        <p class="q-hint">Again, 🗑️ in... 🗑️ out :)</p>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">If this challenge were solved tomorrow, how much would you be willing to pay? (used for ROI calculations) <span class="req">*</span></label>
+        <input class="q-input" type="text" id="roiAmount" placeholder="e.g. 5000"/>
+      </div>
+
+      <p class="error-msg" id="err-4">Please fill in both fields to continue.</p>
+      <button class="btn-next" onclick="validateAndGo(4, 5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 5: Last question — AI areas + tech stack -->
+  <div class="q-page" id="page-5">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="32" viewBox="0 0 44 32" fill="none"><text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text><line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg4)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg4)" stroke-width="2" stroke-linecap="round"/><line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg4)" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/><circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/><circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/><text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text><defs><linearGradient id="qg4" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5ab4ff"/><stop offset="100%" stop-color="#1d6fe8"/></linearGradient></defs></svg></div></div>
+    </div>
+    <div class="q-content">
+      <button class="back-btn" onclick="goTo(4)">← Back</button>
+      <h2 class="accent-head">Last question!</h2>
+
+      <div class="q-block">
+        <label class="q-label">In what specific areas of your business are you interested in implementing AI or automation? <span class="req">*</span></label>
+        <textarea class="q-input" id="aiAreas" placeholder="Lead follow-up, appointment booking, customer onboarding, reporting..."></textarea>
+      </div>
+
+      <div class="q-block">
+        <label class="q-label">What technology or software tools do you use today? CRM? Project Management? Communication? Documents? <span class="req">*</span></label>
+        <textarea class="q-input" id="techStack" placeholder="HubSpot for CRM, Slack for comms, Google Sheets for tracking, Calendly for bookings..."></textarea>
+      </div>
+
+      <p class="error-msg" id="err-5">Please fill in both fields to continue.</p>
+      <button class="btn-next" onclick="validateAndGo(5, 6)">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 6: Email -->
+  <div class="q-page" id="page-6">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="32" viewBox="0 0 44 32" fill="none"><text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text><line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg5)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg5)" stroke-width="2" stroke-linecap="round"/><line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg5)" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/><circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/><circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/><text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text><defs><linearGradient id="qg5" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5ab4ff"/><stop offset="100%" stop-color="#1d6fe8"/></linearGradient></defs></svg></div></div>
+    </div>
+    <div class="q-content">
+      <button class="back-btn" onclick="goTo(5)">← Back</button>
+
+      <div class="q-block">
+        <label class="q-label">You're done! Where should we send the Free Custom AI Automation Blueprint? <span class="req">*</span></label>
+        <input class="q-input" type="email" id="email" placeholder="Email" autocomplete="email"/>
+      </div>
+
+      <p class="error-msg" id="err-6">Please enter a valid email address.</p>
+      <button class="btn-next" onclick="submitForm()">Next →</button>
+    </div>
+  </div>
+
+  <!-- PAGE 7: Thank you -->
+  <div class="q-page" id="page-7">
+    <div class="q-band"></div>
+    <div class="q-logo-row">
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="32" viewBox="0 0 44 32" fill="none"><text x="0" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">ON</text><line x1="28" y1="4" x2="23" y2="28" stroke="url(#qg6)" stroke-width="2" stroke-linecap="round"/><line x1="28" y1="4" x2="33" y2="28" stroke="url(#qg6)" stroke-width="2" stroke-linecap="round"/><line x1="24.5" y1="19" x2="31.5" y2="19" stroke="url(#qg6)" stroke-width="2" stroke-linecap="round"/><circle cx="28" cy="4" r="2.2" fill="#5ab4ff"/><circle cx="23" cy="28" r="2.2" fill="#1d6fe8"/><circle cx="33" cy="28" r="2.2" fill="#1d6fe8"/><text x="36" y="24" font-family="'Exo 2', sans-serif" font-size="13" font-weight="900" fill="white" letter-spacing="1.5">UTO</text><defs><linearGradient id="qg6" x1="28" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5ab4ff"/><stop offset="100%" stop-color="#1d6fe8"/></linearGradient></defs></svg></div></div>
+    </div>
+    <div class="q-content ty-body">
+      <button class="back-btn" onclick="goTo(6)">← Back</button>
+
+      <h2 class="ty-headline">You're in, <span class="name-insert"></span>!</h2>
+
+      <p class="ty-para">You will receive your Free <span class="ty-highlight">"7 Ways AI Can Give You Your Time Back" Blueprint</span> shortly.</p>
+
+      <p class="ty-para">It's what's helping our clients reclaim 10+ hours a week and grow revenue without adding headcount.</p>
+
+      <p class="ty-para">I hope you find it useful.</p>
+
+      <div class="ty-ps-block">
+        <p>Didn't receive your Blueprint? Email us at <a href="mailto:contact@on-auto.ai">contact@on-auto.ai</a> and we'll get it to you right away.</p>
+        <p>P.S. Follow <a href="https://linkedin.com/in/callumcrees" target="_blank">Callum on LinkedIn</a> for daily posts on what's actually working in AI automation right now.</p>
+      </div>
+
+      <button class="btn-next" onclick="goTo(1)" style="margin-top: 32px;">Start over</button>
+    </div>
+  </div>
+
   <script>
-    const TOTAL_PAGES = 7;
     let currentPage = 1;
 
-    const roiValues = [
-      'Not sure yet',
-      '~£1,000/month',
-      '~£5,000/month',
-      '~£10,000/month',
-      '~£20,000/month',
-      '~£30,000/month',
-      '~£40,000/month',
-      '~£50,000/month',
-      '£50,000+/month'
-    ];
-
-    function updateROI(val) {
-      document.getElementById('roiDisplay').textContent = roiValues[val];
-    }
-
     function getName() {
-      return document.getElementById('firstName').value.trim() || 'you';
+      return document.getElementById('firstName').value.trim() || '';
     }
 
     function updateNameInserts() {
       const name = getName();
-      document.querySelectorAll('.name-insert').forEach(el => {
-        el.textContent = name !== 'you' ? name : '';
-      });
+      document.querySelectorAll('.name-insert').forEach(el => el.textContent = name);
     }
 
     function goTo(num) {
-      document.getElementById('page-' + currentPage).classList.remove('active');
-      currentPage = num;
-      document.getElementById('page-' + currentPage).classList.add('active');
+      const cur = document.getElementById('page-' + currentPage);
+      cur.classList.remove('active');
+      if (cur.classList.contains('q-page')) cur.style.display = 'none';
 
-      // Update progress (pages 2–6 count as steps, page 1 = 0, page 7 = 100)
+      currentPage = num;
+      const next = document.getElementById('page-' + currentPage);
+      next.classList.add('active');
+
       const progress = currentPage === 1 ? 0 : currentPage === 7 ? 100 : ((currentPage - 1) / 6) * 100;
       document.getElementById('progressBar').style.width = progress + '%';
 
       updateNameInserts();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function toggleChoice(el) {
-      el.classList.toggle('selected');
     }
 
     function validateAndGo(from, to) {
@@ -1393,29 +743,24 @@
         const li = document.getElementById('linkedinUrl').value.trim();
         if (!fn || !co || !li) valid = false;
       }
-
       if (from === 3) {
-        const ind = document.getElementById('industry').value;
-        const ts = document.getElementById('teamSize').value;
+        const ind = document.getElementById('industry').value.trim();
+        const ts = document.getElementById('teamSize').value.trim();
         const desc = document.getElementById('bizDescription').value.trim();
         if (!ind || !ts || !desc) valid = false;
       }
-
       if (from === 4) {
-        const selected = document.querySelectorAll('#pain-grid .choice-item.selected');
-        if (selected.length === 0) valid = false;
+        const ch = document.getElementById('topChallenge').value.trim();
+        const roi = document.getElementById('roiAmount').value.trim();
+        if (!ch || !roi) valid = false;
       }
-
       if (from === 5) {
+        const ai = document.getElementById('aiAreas').value.trim();
         const tech = document.getElementById('techStack').value.trim();
-        if (!tech) valid = false;
+        if (!ai || !tech) valid = false;
       }
 
-      if (!valid) {
-        errEl.classList.add('visible');
-        return;
-      }
-
+      if (!valid) { errEl.classList.add('visible'); return; }
       errEl.classList.remove('visible');
       goTo(to);
     }
@@ -1423,47 +768,41 @@
     async function submitForm() {
       const email = document.getElementById('email').value.trim();
       const errEl = document.getElementById('err-6');
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailRegex.test(email)) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         errEl.classList.add('visible');
         return;
       }
-
       errEl.classList.remove('visible');
 
       const firstName = document.getElementById('firstName').value.trim();
       const companyName = document.getElementById('companyName').value.trim();
       const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
-      const industry = document.getElementById('industry').value;
-      const teamSize = document.getElementById('teamSize').value;
+      const industry = document.getElementById('industry').value.trim();
+      const teamSize = document.getElementById('teamSize').value.trim();
       const bizDescription = document.getElementById('bizDescription').value.trim();
-      const painPoints = Array.from(document.querySelectorAll('#pain-grid .choice-item.selected')).map(el => el.dataset.value);
-      const painOther = document.getElementById('painOther').value.trim();
+      const topChallenge = document.getElementById('topChallenge').value.trim();
+      const roiAmount = document.getElementById('roiAmount').value.trim();
+      const aiAreas = document.getElementById('aiAreas').value.trim();
       const techStack = document.getElementById('techStack').value.trim();
-      const roiValue = roiValues[document.getElementById('roiSlider').value];
 
       const notes = [
         `Industry: ${industry}`,
         `Team Size: ${teamSize}`,
         `Business: ${bizDescription}`,
-        `Pain Points: ${painPoints.join(', ')}`,
-        painOther ? `Other Pain: ${painOther}` : null,
+        `Top Challenge: ${topChallenge}`,
+        `ROI Value: £${roiAmount}`,
+        `AI Areas: ${aiAreas}`,
         `Tech Stack: ${techStack}`,
-        `ROI Estimate: ${roiValue}`,
         `LinkedIn: ${linkedinUrl}`,
-        `Source: AI Audit Funnel`,
-      ].filter(Boolean).join('\n');
+        `Source: AI Guide Funnel`,
+      ].join('\n');
 
       try {
-        const GHL_KEY = 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f';
         const GHL_HEADERS = {
-          'Authorization': GHL_KEY,
+          'Authorization': 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f',
           'Version': '2021-07-28',
           'Content-Type': 'application/json',
         };
-
-        // 1. Create contact
         const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
           method: 'POST',
           headers: GHL_HEADERS,
@@ -1472,14 +811,12 @@
             firstName,
             email,
             companyName,
-            source: 'AI Audit Funnel',
-            tags: ['audit-funnel', 'on-auto'],
+            source: 'AI Guide Funnel',
+            tags: ['guide-funnel', 'on-auto'],
           })
         });
         const contactData = await contactRes.json();
         const contactId = contactData?.contact?.id;
-
-        // 2. Attach audit detail as a note
         if (contactId) {
           await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
             method: 'POST',
@@ -1488,14 +825,11 @@
           });
         }
       } catch (e) {
-        console.error('GHL submission error:', e);
+        console.error('GHL error:', e);
       }
 
       goTo(7);
     }
-
-    // Init
-    updateROI(2);
   </script>
 </body>
 </html>

@@ -1021,7 +1021,7 @@
       goTo(to);
     }
 
-    function submitForm() {
+    async function submitForm() {
       const email = document.getElementById('email').value.trim();
       const errEl = document.getElementById('err-6');
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -1033,31 +1033,50 @@
 
       errEl.classList.remove('visible');
 
-      // Collect all form data
-      const formData = {
-        firstName: document.getElementById('firstName').value.trim(),
-        companyName: document.getElementById('companyName').value.trim(),
-        linkedinUrl: document.getElementById('linkedinUrl').value.trim(),
-        industry: document.getElementById('industry').value,
-        teamSize: document.getElementById('teamSize').value,
-        bizDescription: document.getElementById('bizDescription').value.trim(),
-        painPoints: Array.from(document.querySelectorAll('#pain-grid .choice-item.selected')).map(el => el.dataset.value),
-        painOther: document.getElementById('painOther').value.trim(),
-        techStack: document.getElementById('techStack').value.trim(),
-        roiValue: roiValues[document.getElementById('roiSlider').value],
-        email: email,
-        submittedAt: new Date().toISOString()
-      };
+      const firstName = document.getElementById('firstName').value.trim();
+      const companyName = document.getElementById('companyName').value.trim();
+      const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+      const industry = document.getElementById('industry').value;
+      const teamSize = document.getElementById('teamSize').value;
+      const bizDescription = document.getElementById('bizDescription').value.trim();
+      const painPoints = Array.from(document.querySelectorAll('#pain-grid .choice-item.selected')).map(el => el.dataset.value);
+      const painOther = document.getElementById('painOther').value.trim();
+      const techStack = document.getElementById('techStack').value.trim();
+      const roiValue = roiValues[document.getElementById('roiSlider').value];
 
-      // Log to console (replace with your webhook / API call)
-      console.log('Form submission:', JSON.stringify(formData, null, 2));
+      const notes = [
+        `Industry: ${industry}`,
+        `Team Size: ${teamSize}`,
+        `Business: ${bizDescription}`,
+        `Pain Points: ${painPoints.join(', ')}`,
+        painOther ? `Other Pain: ${painOther}` : null,
+        `Tech Stack: ${techStack}`,
+        `ROI Estimate: ${roiValue}`,
+        `LinkedIn: ${linkedinUrl}`,
+        `Source: AI Audit Funnel`,
+      ].filter(Boolean).join('\n');
 
-      // TODO: Send to your webhook here
-      // fetch('YOUR_WEBHOOK_URL', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData)
-      // });
+      try {
+        await fetch('https://services.leadconnectorhq.com/contacts/', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f',
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            locationId: 'F4rbkQEhtHZ7rwLFK791',
+            firstName,
+            email,
+            companyName,
+            source: 'AI Audit Funnel',
+            tags: ['audit-funnel', 'on-auto'],
+            notes,
+          })
+        });
+      } catch (e) {
+        console.error('GHL submission error:', e);
+      }
 
       goTo(7);
     }

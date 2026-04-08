@@ -749,10 +749,179 @@
       display: block;
     }
 
+    /* Section divider */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+      margin: 32px 0;
+    }
+
+    /* What's included grid */
+    .included-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .included-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s;
+    }
+
+    .included-item:hover {
+      border-color: var(--border-active);
+    }
+
+    .included-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .included-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* How it works — horizontal steps */
+    .how-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 4px;
+    }
+
+    .how-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .how-num {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, rgba(29,111,232,0.15), rgba(61,171,255,0.1));
+      border: 1px solid rgba(29,111,232,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: #3dabff;
+      flex-shrink: 0;
+    }
+
+    .how-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+      line-height: 1.3;
+    }
+
+    .how-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: block;
+      line-height: 1.4;
+    }
+
+    .how-connector {
+      flex-shrink: 0;
+      width: 40px;
+      margin-top: 22px;
+      opacity: 0.6;
+    }
+
+    /* Testimonials */
+    .testimonial {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stars {
+      font-size: 13px;
+      color: #f5a623;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .quote-mark {
+      font-size: 56px;
+      line-height: 0.6;
+      color: var(--accent);
+      opacity: 0.25;
+      font-family: Georgia, serif;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* CTA block */
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding-top: 4px;
+    }
+
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      padding: 17px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 14px;
+    }
+
+    .cta-sub {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+
     /* Mobile */
     @media (max-width: 520px) {
       .choice-grid {
         grid-template-columns: 1fr;
+      }
+      .included-grid {
+        grid-template-columns: 1fr;
+      }
+      .how-steps {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .how-connector {
+        display: none;
+      }
+      .how-step {
+        flex-direction: row;
+        text-align: left;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px;
+        gap: 14px;
+      }
+      .how-num {
+        flex-shrink: 0;
       }
     }
   </style>
@@ -786,70 +955,77 @@
 
       <!-- Page 1: Cover -->
       <div class="page active" id="page-1">
+
+        <!-- Hero -->
         <div class="cover-tag">Free guide</div>
         <h1 class="cover-headline">7 Ways to Find Out Exactly Where <em>AI Can Give You Your Time Back</em></h1>
         <p class="cover-sub">Answer 5 questions. We'll build a custom blueprint showing where AI can cut your workload, what each one is worth, and how to actually do it.</p>
 
+        <!-- What's included -->
+        <div class="section-divider"></div>
         <p class="section-label">What's included</p>
-        <ul class="cover-bullets">
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            7 ways AI is already being used in your industry right now
-          </li>
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            7 automation fixes for your specific time drains
-          </li>
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            Step-by-step instructions for each one
-          </li>
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            A custom rollout roadmap for your business
-          </li>
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            Hours saved per week for each automation
-          </li>
-          <li>
-            <span class="bullet-icon">
-              <svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3"/></svg>
-            </span>
-            Revenue or cost impact estimate for each one
-          </li>
-        </ul>
-
-        <p class="section-label">How it works</p>
-        <div class="ty-steps" style="margin-bottom: 32px;">
-          <div class="ty-step">
-            <div class="step-num">1</div>
-            <div class="step-text">Fill out the form. 5 questions, takes about 3 minutes.</div>
+        <div class="included-grid">
+          <div class="included-item">
+            <div class="included-num">01</div>
+            <div class="included-text">7 ways AI is already being used in your industry</div>
           </div>
-          <div class="ty-step">
-            <div class="step-num">2</div>
-            <div class="step-text">We build your blueprint around your business and industry.</div>
+          <div class="included-item">
+            <div class="included-num">02</div>
+            <div class="included-text">7 automation fixes for your specific time drains</div>
           </div>
-          <div class="ty-step">
-            <div class="step-num">3</div>
-            <div class="step-text">It lands in your inbox with a full breakdown and roadmap.</div>
+          <div class="included-item">
+            <div class="included-num">03</div>
+            <div class="included-text">Step-by-step build instructions for each one</div>
+          </div>
+          <div class="included-item">
+            <div class="included-num">04</div>
+            <div class="included-text">A custom rollout roadmap for your business</div>
+          </div>
+          <div class="included-item">
+            <div class="included-num">05</div>
+            <div class="included-text">Hours saved per week for each automation</div>
+          </div>
+          <div class="included-item">
+            <div class="included-num">06</div>
+            <div class="included-text">Revenue or cost impact estimate for each one</div>
           </div>
         </div>
 
+        <!-- How it works -->
+        <div class="section-divider"></div>
+        <p class="section-label">How it works</p>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-num">1</div>
+            <strong class="how-title">Fill out the form</strong>
+            <span class="how-sub">5 questions, 3 minutes</span>
+          </div>
+          <div class="how-connector">
+            <svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
+          </div>
+          <div class="how-step">
+            <div class="how-num">2</div>
+            <strong class="how-title">We build your blueprint</strong>
+            <span class="how-sub">Custom to your industry</span>
+          </div>
+          <div class="how-connector">
+            <svg viewBox="0 0 40 12" fill="none"><line x1="0" y1="6" x2="40" y2="6" stroke="#1e3352" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
+          </div>
+          <div class="how-step">
+            <div class="how-num">3</div>
+            <strong class="how-title">It lands in your inbox</strong>
+            <span class="how-sub">Full breakdown + roadmap</span>
+          </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="section-divider"></div>
         <p class="section-label">What others are saying</p>
         <div class="testimonials">
           <div class="testimonial">
-            <p class="testimonial-text">"Went through it and realised half the stuff eating my week didn't need to involve me at all. Don't have to think about follow-up or chasing quotes anymore. It just gets handled. I'm doing the actual job again."</p>
+            <div class="stars">★★★★★</div>
+            <div class="quote-mark">"</div>
+            <p class="testimonial-text">Went through it and realised half the stuff eating my week didn't need to involve me at all. Don't have to think about follow-up or chasing quotes anymore. It just gets handled. I'm doing the actual job again.</p>
             <div class="testimonial-author">
               <div class="author-avatar">JS</div>
               <div class="author-info">
@@ -859,7 +1035,9 @@
             </div>
           </div>
           <div class="testimonial">
-            <p class="testimonial-text">"Ran the reactivation plan from the blueprint on my whole lead list. Booked 11 calls in 10 days from people I thought had gone cold. Wish I'd done it sooner."</p>
+            <div class="stars">★★★★★</div>
+            <div class="quote-mark">"</div>
+            <p class="testimonial-text">Ran the reactivation plan from the blueprint on my whole lead list. Booked 11 calls in 10 days from people I thought had gone cold. Wish I'd done it sooner.</p>
             <div class="testimonial-author">
               <div class="author-avatar">CR</div>
               <div class="author-info">
@@ -870,12 +1048,16 @@
           </div>
         </div>
 
-        <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px;">Est. time to complete: 3 minutes</p>
+        <!-- CTA -->
+        <div class="section-divider"></div>
+        <div class="cta-block">
+          <button class="btn-primary btn-full" onclick="goTo(2)">
+            Get my free guide
+            <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
+          </button>
+          <p class="cta-sub">Takes 3 minutes &nbsp;·&nbsp; Free &nbsp;·&nbsp; No obligation</p>
+        </div>
 
-        <button class="btn-primary" onclick="goTo(2)">
-          Get my free guide
-          <svg viewBox="0 0 16 16" fill="none"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9,4 13,8 9,12"/></svg>
-        </button>
       </div>
 
       <!-- Page 2: Contact -->

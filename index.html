@@ -1057,13 +1057,17 @@
       ].filter(Boolean).join('\n');
 
       try {
-        await fetch('https://services.leadconnectorhq.com/contacts/', {
+        const GHL_KEY = 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f';
+        const GHL_HEADERS = {
+          'Authorization': GHL_KEY,
+          'Version': '2021-07-28',
+          'Content-Type': 'application/json',
+        };
+
+        // 1. Create contact
+        const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
           method: 'POST',
-          headers: {
-            'Authorization': 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f',
-            'Version': '2021-07-28',
-            'Content-Type': 'application/json',
-          },
+          headers: GHL_HEADERS,
           body: JSON.stringify({
             locationId: 'F4rbkQEhtHZ7rwLFK791',
             firstName,
@@ -1071,9 +1075,19 @@
             companyName,
             source: 'AI Audit Funnel',
             tags: ['audit-funnel', 'on-auto'],
-            notes,
           })
         });
+        const contactData = await contactRes.json();
+        const contactId = contactData?.contact?.id;
+
+        // 2. Attach audit detail as a note
+        if (contactId) {
+          await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
+            method: 'POST',
+            headers: GHL_HEADERS,
+            body: JSON.stringify({ body: notes })
+          });
+        }
       } catch (e) {
         console.error('GHL submission error:', e);
       }

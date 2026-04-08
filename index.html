@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free AI Guide — On Auto</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Exo+2:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,17 +15,18 @@
 
     :root {
       --bg: #060e1c;
-      --surface: #0b1726;
-      --surface-2: #0f1e30;
-      --border: #142034;
+      --surface: #0b1828;
+      --surface-2: #0e2038;
+      --surface-alt: #071222;
+      --border: #162438;
       --border-active: #1e3a5f;
       --accent: #1d6fe8;
       --accent-hover: #3585f0;
       --accent-light: rgba(29, 111, 232, 0.1);
       --accent-glow: rgba(29, 111, 232, 0.18);
-      --text: #e8effe;
-      --text-muted: #5d7da0;
-      --text-dim: #263d58;
+      --text: #ffffff;
+      --text-muted: #a0b8d0;
+      --text-dim: #4a6680;
       --radius: 12px;
     }
 
@@ -99,21 +100,23 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 0px;
+      gap: 0;
     }
 
     .logo-word {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 2.5px;
-      color: var(--text);
+      font-family: 'Exo 2', 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      color: #ffffff;
       text-transform: uppercase;
+      line-height: 1;
     }
 
     .logo-icon {
-      width: 17px;
-      height: 21px;
-      margin: 0 1px;
+      width: 18px;
+      height: 22px;
+      margin: 0 2px;
       position: relative;
       top: -1px;
     }
@@ -201,19 +204,19 @@
 
     .cover-sub {
       font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.65;
+      color: #8ab0cc;
+      line-height: 1.7;
       margin-bottom: 36px;
       max-width: 500px;
     }
 
     .section-label {
       font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      letter-spacing: 1px;
+      font-weight: 700;
+      color: #3d8ef0;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .cover-bullets {
@@ -280,10 +283,9 @@
 
     .testimonial-text {
       font-size: 14px;
-      color: #8aaac8;
-      line-height: 1.65;
-      margin-bottom: 14px;
-      font-style: italic;
+      color: #c8ddf0;
+      line-height: 1.7;
+      margin-bottom: 16px;
     }
 
     .testimonial-author {
@@ -760,45 +762,54 @@
     .included-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 4px;
     }
 
     .included-item {
       background: var(--surface);
       border: 1px solid var(--border);
+      border-top: 2px solid var(--border-active);
       border-radius: var(--radius);
       padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.2s;
     }
 
     .included-item:hover {
-      border-color: var(--border-active);
+      background: var(--surface-2);
+      border-top-color: var(--accent);
     }
 
     .included-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 1px;
-      font-variant-numeric: tabular-nums;
+      font-size: 10px;
+      font-weight: 800;
+      color: #3d8ef0;
+      letter-spacing: 1.5px;
     }
 
     .included-text {
       font-size: 13px;
-      color: var(--text-muted);
+      font-weight: 500;
+      color: var(--text);
       line-height: 1.5;
     }
 
-    /* How it works — horizontal steps */
+    /* How it works — distinct band */
+    .how-band {
+      background: linear-gradient(135deg, #0a1e3a 0%, #0c2040 50%, #0a1e3a 100%);
+      border: 1px solid #1e3a5f;
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 4px;
+    }
+
     .how-steps {
       display: flex;
       align-items: flex-start;
       gap: 0;
-      margin-bottom: 4px;
     }
 
     .how-step {
@@ -807,66 +818,89 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .how-num {
-      width: 44px;
-      height: 44px;
-      background: linear-gradient(135deg, rgba(29,111,232,0.15), rgba(61,171,255,0.1));
-      border: 1px solid rgba(29,111,232,0.3);
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #1d6fe8, #2a7ef5);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 800;
-      color: #3dabff;
+      color: #ffffff;
       flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(29,111,232,0.35);
     }
 
     .how-title {
       font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
+      font-weight: 700;
+      color: #ffffff;
       display: block;
       line-height: 1.3;
     }
 
     .how-sub {
       font-size: 12px;
-      color: var(--text-muted);
+      color: #7a9bbf;
       display: block;
       line-height: 1.4;
+      margin-top: -4px;
     }
 
     .how-connector {
       flex-shrink: 0;
       width: 40px;
-      margin-top: 22px;
-      opacity: 0.6;
+      margin-top: 24px;
+      opacity: 0.5;
     }
 
     /* Testimonials */
+    .testimonials {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
     .testimonial {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
       position: relative;
       overflow: hidden;
     }
 
+    .testimonial::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), #3dabff);
+    }
+
     .stars {
-      font-size: 13px;
-      color: #f5a623;
+      font-size: 14px;
+      color: #f5b731;
       letter-spacing: 2px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      display: block;
     }
 
     .quote-mark {
-      font-size: 56px;
-      line-height: 0.6;
+      font-size: 72px;
+      line-height: 0.5;
       color: var(--accent);
-      opacity: 0.25;
+      opacity: 0.2;
       font-family: Georgia, serif;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       display: block;
     }
 
@@ -937,13 +971,21 @@
   <div class="logo-bar">
     <div class="logo">
       <span class="logo-word">ON</span>
-      <svg class="logo-icon" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="10" y1="2.5" x2="1.5" y2="21.5" stroke="#1d6fe8" stroke-width="2.2" stroke-linecap="round"/>
-        <line x1="10" y1="2.5" x2="18.5" y2="21.5" stroke="#1d6fe8" stroke-width="2.2" stroke-linecap="round"/>
-        <line x1="4.5" y1="15" x2="15.5" y2="15" stroke="#1d6fe8" stroke-width="2.2" stroke-linecap="round"/>
-        <circle cx="10" cy="2.5" r="2.5" fill="#3dabff"/>
-        <circle cx="1.5" cy="21.5" r="2.5" fill="#1d6fe8"/>
-        <circle cx="18.5" cy="21.5" r="2.5" fill="#1d6fe8"/>
+      <svg class="logo-icon" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Triangle body -->
+        <line x1="11" y1="3" x2="2" y2="23" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="11" y1="3" x2="20" y2="23" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="5.5" y1="16" x2="16.5" y2="16" stroke="url(#lg)" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- Nodes -->
+        <circle cx="11" cy="3" r="3" fill="#5ab4ff"/>
+        <circle cx="2" cy="23" r="3" fill="#1d6fe8"/>
+        <circle cx="20" cy="23" r="3" fill="#1d6fe8"/>
+        <defs>
+          <linearGradient id="lg" x1="11" y1="3" x2="11" y2="23" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#5ab4ff"/>
+            <stop offset="100%" stop-color="#1d6fe8"/>
+          </linearGradient>
+        </defs>
       </svg>
       <span class="logo-word">UTO</span>
     </div>
@@ -994,6 +1036,7 @@
         <!-- How it works -->
         <div class="section-divider"></div>
         <p class="section-label">How it works</p>
+        <div class="how-band">
         <div class="how-steps">
           <div class="how-step">
             <div class="how-num">1</div>
@@ -1016,6 +1059,7 @@
             <strong class="how-title">It lands in your inbox</strong>
             <span class="how-sub">Full breakdown + roadmap</span>
           </div>
+        </div>
         </div>
 
         <!-- Testimonials -->

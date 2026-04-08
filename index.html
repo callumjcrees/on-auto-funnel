@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Free AI Guide — On Auto</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Exo+2:wght@800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -64,24 +64,24 @@
     .cover-logo {
       display: flex;
       align-items: center;
-      gap: 0;
+      gap: 1px;
       margin-bottom: 40px;
     }
-    .cover-logo-word {
-      font-family: 'Exo 2', sans-serif;
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 3px;
+    .logo-word {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 30px;
       color: #fff;
-      text-transform: uppercase;
       line-height: 1;
+      letter-spacing: 0.5px;
     }
-    .cover-logo-icon {
-      width: 20px;
-      height: 24px;
-      margin: 0 2px;
+    .logo-a-mark {
+      width: 22px;
+      height: 28px;
+      flex-shrink: 0;
       position: relative;
-      top: -1px;
+      top: 1px;
+      margin: 0 1px;
     }
 
     .cover-tag {
@@ -145,27 +145,38 @@
       margin: 32px 0;
     }
 
-    /* What's included grid */
-    .included-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
+    /* What's included list */
+    .included-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
       margin-bottom: 4px;
     }
     .included-item {
-      background: #0b1828;
-      border: 1px solid #162438;
-      border-top: 2px solid #1e3a5f;
-      border-radius: var(--radius);
-      padding: 16px;
       display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: border-top-color 0.2s;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: #d0e4f8;
+      line-height: 1.55;
+      font-weight: 500;
     }
-    .included-item:hover { border-top-color: var(--accent); }
-    .included-num { font-size: 10px; font-weight: 800; color: #3d8ef0; letter-spacing: 1.5px; }
-    .included-text { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.5; }
+    .included-check {
+      width: 20px;
+      height: 20px;
+      background: rgba(29,111,232,0.15);
+      border: 1px solid rgba(29,111,232,0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 800;
+      color: #3dabff;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
 
     /* How it works */
     .how-band {
@@ -422,6 +433,16 @@
 </head>
 <body>
 
+  <!-- Shared SVG defs (gradient used by all logo marks) -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="oa-grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#7dd3fc"/>
+        <stop offset="100%" stop-color="#1d6fe8"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <div class="progress-container">
     <div class="progress-bar" id="progressBar" style="width: 0%"></div>
   </div>
@@ -431,12 +452,15 @@
     <div class="cover-inner">
 
       <div class="cover-logo">
-        <svg width="160" height="32" viewBox="0 0 168 34" fill="none">
-          <text x="0" y="27" font-family="'Exo 2', sans-serif" font-weight="900" font-size="26" fill="white" letter-spacing="-1">ON</text>
-          <polygon points="63,4 76,28 50,28" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/>
-          <circle cx="63" cy="4" r="3" fill="#1d6fe8"/>
-          <text x="82" y="27" font-family="'Exo 2', sans-serif" font-weight="900" font-size="26" fill="white" letter-spacing="-1">AUTO</text>
+        <span class="logo-word">ON</span>
+        <svg class="logo-a-mark" viewBox="0 0 30 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="15" y1="3" x2="2" y2="31" stroke="url(#oa-grad)" stroke-width="5.5" stroke-linecap="round"/>
+          <line x1="15" y1="3" x2="28" y2="31" stroke="url(#oa-grad)" stroke-width="5.5" stroke-linecap="round"/>
+          <circle cx="15" cy="3" r="4.5" fill="#7dd3fc"/>
+          <circle cx="2" cy="31" r="3.5" fill="#1d6fe8"/>
+          <circle cx="28" cy="31" r="3.5" fill="#1d6fe8"/>
         </svg>
+        <span class="logo-word">UTO</span>
       </div>
 
       <div class="cover-tag">Free guide</div>
@@ -445,14 +469,14 @@
 
       <div class="section-divider"></div>
       <p class="section-label">What's included</p>
-      <div class="included-grid">
-        <div class="included-item"><div class="included-num">01</div><div class="included-text">7 ways AI is already being used in your industry</div></div>
-        <div class="included-item"><div class="included-num">02</div><div class="included-text">7 automation fixes for your specific time drains</div></div>
-        <div class="included-item"><div class="included-num">03</div><div class="included-text">Step-by-step build instructions for each one</div></div>
-        <div class="included-item"><div class="included-num">04</div><div class="included-text">A custom rollout roadmap for your business</div></div>
-        <div class="included-item"><div class="included-num">05</div><div class="included-text">Hours saved per week for each automation</div></div>
-        <div class="included-item"><div class="included-num">06</div><div class="included-text">Revenue or cost impact estimate for each one</div></div>
-      </div>
+      <ul class="included-list">
+        <li class="included-item"><div class="included-check">✓</div><span>7 ways AI and automation is being used in your industry niche right now</span></li>
+        <li class="included-item"><div class="included-check">✓</div><span>7 ways AI and automation can solve your biggest business challenges</span></li>
+        <li class="included-item"><div class="included-check">✓</div><span>Step-by-step build instructions for each solution</span></li>
+        <li class="included-item"><div class="included-check">✓</div><span>A custom roadmap for implementing your automations</span></li>
+        <li class="included-item"><div class="included-check">✓</div><span>Hours saved per week for each solution</span></li>
+        <li class="included-item"><div class="included-check">✓</div><span>Estimated cost or revenue impact for each one</span></li>
+      </ul>
 
       <div class="section-divider"></div>
       <p class="section-label">How it works</p>
@@ -523,9 +547,12 @@
     <div class="q-logo-row">
       <div class="q-logo-circle">
         <div class="q-logo-inner">
-          <svg width="46" height="44" viewBox="0 0 46 44" fill="none">
-            <polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/>
-            <circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/>
+          <svg width="44" height="50" viewBox="0 0 44 50" fill="none">
+            <line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/>
+            <line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/>
+            <circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/>
+            <circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/>
+            <circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/>
           </svg>
         </div>
       </div>
@@ -559,7 +586,7 @@
   <div class="q-page" id="page-3">
     <div class="q-band"></div>
     <div class="q-logo-row">
-      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="46" height="44" viewBox="0 0 46 44" fill="none"><polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/></svg></div></div>
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="50" viewBox="0 0 44 50" fill="none"><line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/><circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/><circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/></svg></div></div>
     </div>
     <div class="q-content">
       <button class="back-btn" onclick="goTo(2)">← Back</button>
@@ -589,7 +616,7 @@
   <div class="q-page" id="page-4">
     <div class="q-band"></div>
     <div class="q-logo-row">
-      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="46" height="44" viewBox="0 0 46 44" fill="none"><polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/></svg></div></div>
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="50" viewBox="0 0 44 50" fill="none"><line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/><circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/><circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/></svg></div></div>
     </div>
     <div class="q-content">
       <button class="back-btn" onclick="goTo(3)">← Back</button>
@@ -615,7 +642,7 @@
   <div class="q-page" id="page-5">
     <div class="q-band"></div>
     <div class="q-logo-row">
-      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="46" height="44" viewBox="0 0 46 44" fill="none"><polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/></svg></div></div>
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="50" viewBox="0 0 44 50" fill="none"><line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/><circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/><circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/></svg></div></div>
     </div>
     <div class="q-content">
       <button class="back-btn" onclick="goTo(4)">← Back</button>
@@ -640,7 +667,7 @@
   <div class="q-page" id="page-6">
     <div class="q-band"></div>
     <div class="q-logo-row">
-      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="46" height="44" viewBox="0 0 46 44" fill="none"><polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/></svg></div></div>
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="50" viewBox="0 0 44 50" fill="none"><line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/><circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/><circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/></svg></div></div>
     </div>
     <div class="q-content">
       <button class="back-btn" onclick="goTo(5)">← Back</button>
@@ -659,7 +686,7 @@
   <div class="q-page" id="page-7">
     <div class="q-band"></div>
     <div class="q-logo-row">
-      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="46" height="44" viewBox="0 0 46 44" fill="none"><polygon points="23,2 43,42 3,42" fill="none" stroke="#1d6fe8" stroke-width="2.5" stroke-linejoin="round"/><circle cx="23" cy="2" r="3.5" fill="#1d6fe8"/></svg></div></div>
+      <div class="q-logo-circle"><div class="q-logo-inner"><svg width="44" height="50" viewBox="0 0 44 50" fill="none"><line x1="22" y1="4" x2="4" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><line x1="22" y1="4" x2="40" y2="46" stroke="url(#oa-grad)" stroke-width="7" stroke-linecap="round"/><circle cx="22" cy="4" r="5.5" fill="#7dd3fc"/><circle cx="4" cy="46" r="4.5" fill="#1d6fe8"/><circle cx="40" cy="46" r="4.5" fill="#1d6fe8"/></svg></div></div>
     </div>
     <div class="q-content ty-body">
       <button class="back-btn" onclick="goTo(6)">← Back</button>

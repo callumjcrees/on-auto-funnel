@@ -763,28 +763,82 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'Submitting…';
 
-      const payload = {
-        firstName: document.getElementById('firstName').value.trim(),
-        companyName: document.getElementById('companyName').value.trim(),
-        linkedinUrl: document.getElementById('linkedinUrl').value.trim(),
-        industry: document.getElementById('industry').value.trim(),
-        teamSize: document.getElementById('teamSize').value.trim(),
-        bizDescription: document.getElementById('bizDescription').value.trim(),
-        topChallenge: document.getElementById('topChallenge').value.trim(),
-        roiAmount: document.getElementById('roiAmount').value.trim(),
-        aiAreas: document.getElementById('aiAreas').value.trim(),
-        techStack: document.getElementById('techStack').value.trim(),
-        email,
+      const firstName = document.getElementById('firstName').value.trim();
+      const companyName = document.getElementById('companyName').value.trim();
+      const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+      const industry = document.getElementById('industry').value.trim();
+      const teamSize = document.getElementById('teamSize').value.trim();
+      const bizDescription = document.getElementById('bizDescription').value.trim();
+      const topChallenge = document.getElementById('topChallenge').value.trim();
+      const roiAmount = document.getElementById('roiAmount').value.trim();
+      const aiAreas = document.getElementById('aiAreas').value.trim();
+      const techStack = document.getElementById('techStack').value.trim();
+
+      const GHL = {
+        headers: {
+          'Authorization': 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f',
+          'Version': '2021-07-28',
+          'Content-Type': 'application/json',
+        },
+        locationId: 'F4rbkQEhtHZ7rwLFK791',
       };
 
+      const notes = [
+        `Industry: ${industry}`,
+        `Team Size: ${teamSize}`,
+        `Business: ${bizDescription}`,
+        `Top Challenge: ${topChallenge}`,
+        `ROI Value: £${roiAmount}`,
+        `AI Areas: ${aiAreas}`,
+        `Tech Stack: ${techStack}`,
+        `LinkedIn: ${linkedinUrl}`,
+        `Source: AI Guide Funnel`,
+      ].join('\n');
+
       try {
-        await fetch('/.netlify/functions/submit', {
+        // 1. Create contact
+        const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          headers: GHL.headers,
+          body: JSON.stringify({
+            locationId: GHL.locationId,
+            firstName,
+            email,
+            companyName,
+            source: 'AI Guide Funnel',
+            tags: ['guide-funnel', 'on-auto'],
+          }),
         });
+
+        const contactData = await contactRes.json();
+        if (!contactRes.ok) throw new Error(`Contact failed: ${JSON.stringify(contactData)}`);
+
+        const contactId = contactData?.contact?.id;
+        if (!contactId) throw new Error('No contact ID in response');
+
+        // 2. Add note
+        await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
+          method: 'POST',
+          headers: GHL.headers,
+          body: JSON.stringify({ body: notes }),
+        });
+
+        // 3. Create opportunity
+        await fetch('https://services.leadconnectorhq.com/opportunities/', {
+          method: 'POST',
+          headers: GHL.headers,
+          body: JSON.stringify({
+            pipelineId: 'F9TzPgajMxi9HVPYsqTp',
+            locationId: GHL.locationId,
+            name: `${firstName} — ${companyName}`,
+            pipelineStageId: '77613488-801d-464f-9b36-4d7ccb172997',
+            contactId,
+            status: 'open',
+          }),
+        });
+
       } catch (e) {
-        console.error('Submit error:', e);
+        console.error('GHL submission error:', e);
       }
 
       submitBtn.disabled = false;

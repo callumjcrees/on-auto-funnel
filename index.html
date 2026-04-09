@@ -811,10 +811,10 @@
         });
 
         const contactData = await contactRes.json();
-        if (!contactRes.ok) throw new Error(`Contact failed: ${JSON.stringify(contactData)}`);
 
-        const contactId = contactData?.contact?.id;
-        if (!contactId) throw new Error('No contact ID in response');
+        // Handle duplicate contact — GHL returns 400 with existing ID in meta
+        const contactId = contactData?.contact?.id || contactData?.meta?.contactId;
+        if (!contactId) throw new Error(`No contact ID: ${JSON.stringify(contactData)}`);
 
         // 2. Add note
         await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {

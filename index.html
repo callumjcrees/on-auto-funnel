@@ -759,72 +759,36 @@
       }
       errEl.classList.remove('visible');
 
-      const firstName = document.getElementById('firstName').value.trim();
-      const companyName = document.getElementById('companyName').value.trim();
-      const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
-      const industry = document.getElementById('industry').value.trim();
-      const teamSize = document.getElementById('teamSize').value.trim();
-      const bizDescription = document.getElementById('bizDescription').value.trim();
-      const topChallenge = document.getElementById('topChallenge').value.trim();
-      const roiAmount = document.getElementById('roiAmount').value.trim();
-      const aiAreas = document.getElementById('aiAreas').value.trim();
-      const techStack = document.getElementById('techStack').value.trim();
+      const submitBtn = document.querySelector('#page-6 .btn-next');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
 
-      const notes = [
-        `Industry: ${industry}`,
-        `Team Size: ${teamSize}`,
-        `Business: ${bizDescription}`,
-        `Top Challenge: ${topChallenge}`,
-        `ROI Value: £${roiAmount}`,
-        `AI Areas: ${aiAreas}`,
-        `Tech Stack: ${techStack}`,
-        `LinkedIn: ${linkedinUrl}`,
-        `Source: AI Guide Funnel`,
-      ].join('\n');
+      const payload = {
+        firstName: document.getElementById('firstName').value.trim(),
+        companyName: document.getElementById('companyName').value.trim(),
+        linkedinUrl: document.getElementById('linkedinUrl').value.trim(),
+        industry: document.getElementById('industry').value.trim(),
+        teamSize: document.getElementById('teamSize').value.trim(),
+        bizDescription: document.getElementById('bizDescription').value.trim(),
+        topChallenge: document.getElementById('topChallenge').value.trim(),
+        roiAmount: document.getElementById('roiAmount').value.trim(),
+        aiAreas: document.getElementById('aiAreas').value.trim(),
+        techStack: document.getElementById('techStack').value.trim(),
+        email,
+      };
 
       try {
-        const GHL_HEADERS = {
-          'Authorization': 'Bearer pit-d269fd1b-794c-4a57-8988-e03cd354c50f',
-          'Version': '2021-07-28',
-          'Content-Type': 'application/json',
-        };
-        const contactRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        await fetch('/.netlify/functions/submit', {
           method: 'POST',
-          headers: GHL_HEADERS,
-          body: JSON.stringify({
-            locationId: 'F4rbkQEhtHZ7rwLFK791',
-            firstName,
-            email,
-            companyName,
-            source: 'AI Guide Funnel',
-            tags: ['guide-funnel', 'on-auto'],
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
         });
-        const contactData = await contactRes.json();
-        const contactId = contactData?.contact?.id;
-        if (contactId) {
-          await fetch(`https://services.leadconnectorhq.com/contacts/${contactId}/notes`, {
-            method: 'POST',
-            headers: GHL_HEADERS,
-            body: JSON.stringify({ body: notes })
-          });
-          await fetch('https://services.leadconnectorhq.com/opportunities/', {
-            method: 'POST',
-            headers: GHL_HEADERS,
-            body: JSON.stringify({
-              pipelineId: 'F9TzPgajMxi9HVPYsqTp',
-              locationId: 'F4rbkQEhtHZ7rwLFK791',
-              name: `${firstName} — ${companyName}`,
-              pipelineStageId: '77613488-801d-464f-9b36-4d7ccb172997',
-              contactId,
-              status: 'open',
-            })
-          });
-        }
       } catch (e) {
-        console.error('GHL error:', e);
+        console.error('Submit error:', e);
       }
 
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Next →';
       goTo(7);
     }
   </script>
